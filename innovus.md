@@ -69,7 +69,10 @@ setEndCapMode -reset
 setEndCapMode -boundary_tap false
 ```
 
-奇数层为横向金属，偶数层为纵向金属。在Power routing中，通常预留最顶层的两层金属作为最终设计的电源连接。在此22nm工艺中，**顶层金属为AP(8)**，因此预留M7、AP作为顶层电源连接。**每个数字模块的最顶层金属为M6**
+* 奇数层为横向金属，偶数层为纵向金属。
+* 在Power routing中，通常预留最顶层的两层金属作为最终设计的电源连接。
+* 在此22nm工艺中，**顶层金属为AP(8)**，因此预留M7、AP作为顶层电源连接。
+* **每个数字模块的最顶层金属为M6**
 
 6. Placement
 ```bash
@@ -112,3 +115,31 @@ create_ccopt_clock_tree_spec
 
 ccopt_design -check_prerequisites
 ccopt_design -outDir ../reports/layout/INNOVUS_RPT -prefix ccopt
+```
+
+8. Routing, Setup/hold timing optimization
+```bash
+setExtractRCMode -engine postRoute -effortLevel medium -tQuantusForPostRoute true
+
+set NanoRouteMode -routeWithTimingDriven true \
+		  -routeWithSiDriven true \
+		  -routeWithLithoDriven false \
+		  -routeDesignRouteClockNetsFirst true \
+		  -routeReserveSpaceForMultiCut false \
+		  -drouteUseMultiCutViaEffort low \
+		  -drouteFixAntenna true
+
+routeDesign
+
+setExtractRCMode -engine postRoute -effortLeve medium -tQuantusForPostRoute true
+setOptMode -verbose true
+setOptMode -highEffortOptCells $hold_fixing_cells
+setOptMode -holdFixingCells $hold_fixing_cells
+optDesign -postRoute -drv
+optDesign -postRoute -incr
+optDesign -postRoute -hold
+```
+
+* 可以通过简单的命令快速查看timing
+* `report_timing`来查看setup timing
+* `report_timing -early`来查看hold timing
