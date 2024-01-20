@@ -237,21 +237,26 @@
 	```
 
 6. 添加Power Straps
-```tcl
-# core ring
-setAddRingMode -avoid_short true
-addRing -nets [lists VDD VDD_SRAM VSS] -type core_rings -follow core -layer {top M5 bottom M5 left M4 right M4} -width 0.7 -spacing 0.35 -center 0
+	```tcl
+	# core ring
+	setAddRingMode -avoid_short true
+	addRing -nets [lists VDD VDD_SRAM VSS] -type core_rings -follow core -layer {top M5 bottom M5 left M4 right M4} -width 0.7 -spacing 0.35 -center 0
 
-# add power straps at both sides of SRAM
-selectInst $sram_macro
-addRing -nets {VSS VDD} -type block_rings -around selected -layer {top M5 bottom M5 left M4 right M4} -width {top 0.14 bottom 0.14 left 0.7 right 0.7} -spacing {top 0.14 bottom 0.14 left 0.35 right 0.35} -offset {top 0.14 bottom 0.14 left 0.7 right 0.7} -center 0
+	# add power straps at both sides of SRAM
+	selectInst $sram_macro
+	addRing -nets {VSS VDD} -type block_rings -around selected -layer {top M5 bottom M5 left M4 right M4} -width {top 0.14 bottom 0.14 left 0.7 right 0.7} -spacing {top 0.14 bottom 0.14 left 0.35 right 0.35} -offset {top 0.14 bottom 0.14 left 0.7 right 0.7} -center 0
+	
+	addStripe -start_offset 0.7 -direction vertical -block_ring_top_layer_limit M6 -padcore_ring_bottom_layer_limit M1 -set_to_set_distance 7 -stacked_via_top_layer M6 -padcore_ring_top_layer_limit M6 -spacing 0.7 -layer M6 -block_ring_bottom_layer_limit M1 -width 1.4 -nets { VDD VSS VDD_SRAM} -stacked_via_bottom_layer M1
+	
+	sroute -connect { corePin } -layerChangeRange { M1 M6 } -blockPinTarget { nearestRingStripe nearestTarget } -padPinPortConnect { allPort oneGeom } -checkAlignedSecondaryPin 1 -blockPin useLef  -allowJogging 0 -crossoverViaBottomLayer M1 -allowLayerChange 1 -targetViaTopLayer M6 -crossoverViaTopLayer M6 -targetViaBottomLayer M1 -nets {VDD VSS VDD_SRAM}
+	
+	editPowerVia -skip_via_on_pin Standardcell -bottom_layer M1 -add_vias 1 -top_layer M6
+	
+	setEndCapMode -reset
+	setEndCapMode -boundary_tap false
+	```
+	* 可以看到SRAM的Power通过Via从M4连接到M6的VDD_SRAM	上
 
-addStripe -start_offset 0.7 -direction vertical -block_ring_top_layer_limit M6 -padcore_ring_bottom_layer_limit M1 -set_to_set_distance 7 -stacked_via_top_layer M6 -padcore_ring_top_layer_limit M6 -spacing 0.7 -layer M6 -block_ring_bottom_layer_limit M1 -width 1.4 -nets { VDD VSS VDD_SRAM} -stacked_via_bottom_layer M1
-
-sroute -connect { corePin } -layerChangeRange { M1 M6 } -blockPinTarget { nearestRingStripe nearestTarget } -padPinPortConnect { allPort oneGeom } -checkAlignedSecondaryPin 1 -blockPin useLef  -allowJogging 0 -crossoverViaBottomLayer M1 -allowLayerChange 1 -targetViaTopLayer M6 -crossoverViaTopLayer M6 -targetViaBottomLayer M1 -nets {VDD VSS VDD_SRAM}
-
-editPowerVia -skip_via_on_pin Standardcell -bottom_layer M1 -add_vias 1 -top_layer M6
-
-setEndCapMode -reset
-setEndCapMode -boundary_tap false
-```
+7. Placement
+	```tcl
+	
