@@ -259,4 +259,60 @@
 
 7. Placement
 	```tcl
+	setTieHiLoMode  -cell $rm_tie_hi_lo_list \
+									-maxFanout 8
+	deleteTieHiLo
 	
+	setPlaceMode -reset
+	setPlaceMode -place_detail_legalization_inst_gap 2
+	setPlaceMode -place_detail_use_no_diffusion_one_site_filler false
+	
+	setNanoRouteMode -routeTopRoutingLayer 5
+	setNanoRouteMode -routeBottomRoutingLayer 2
+	setPlaceMode -fp false
+	setAnalysisMode -aocv false
+	
+	placeDesign
+	place_opt_design -incremental  -out_dir ../reports/layout/INNOVUS_RPT -prefix place
+	timeDesign -preCTS -outDir ../reports/layout/INNOVUS_RPT
+	```
+
+8. Routing
+	```tcl
+	setExtractRCMode -engine postRoute -effortLevel medium -tQuantusForPostRoute true
+	
+	set NanoRouteMode -routeWithTimingDriven true \
+			  						-routeWithSiDriven true \
+										-routeWithLithoDriven false \
+			  						-routeDesignRouteClockNetsFirst true \
+										-routeReserveSpaceForMultiCut false \
+						 				-drouteUseMultiCutViaEffort low \
+			  						-drouteFixAntenna true
+	
+	routeDesign
+	
+	setExtractRCMode -engine postRoute -effortLeve medium -tQuantusForPostRoute true
+	setOptMode -verbose true
+	setOptMode -highEffortOptCells $hold_fixing_cells
+	setOptMode -holdFixingCells $hold_fixing_cells
+	optDesign -postRoute -drv
+	optDesign -postRoute -incr
+	optDesign -postRoute -hold
+	```
+
+ 9. Signoff
+	```tcl
+	setNanoRouteMode -routeWithEco true -drouteFixAntenna true -routeInsertAntennaDiode true
+	globalDetailRoute
+	
+	setFillerMode -scheme locationFirst \
+		      			-minHole true \
+		      			-fitGap true \
+		      			-diffCellViol true
+	
+	addFiller -cell $rm_fill_cells
+	ecoRoute -fix_drc
+	
+	setFillerMode -ecoMode true
+	addFiller -fixDRC .fitGap -cell $rm_fill_cells
+	```
