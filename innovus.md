@@ -1,5 +1,7 @@
 # Innovus learning notes
 
+## Breakdown
+
 1. 打开Innovus和流程Scripts
 ```bash
 cd scripts
@@ -143,3 +145,25 @@ optDesign -postRoute -hold
 * 可以通过简单的命令快速查看timing
 * `report_timing`来查看setup timing
 * `report_timing -early`来查看hold timing
+
+9. Signoff：添加Filler，再次修复DRC
+```bash
+setNanoRouteMode -routeWithEco true -drouteFixAntenna true -routeInsertAntennaDiode true
+globalDetailRoute
+
+setFillerMode -scheme locationFirst \
+	      -minHole true \
+	      -fitGap true \
+	      -diffCellViol true
+
+addFiller -cell $rm_fill_cells
+ecoRoute -fix_drc
+
+setFillerMode -ecoMode true
+addFiller -fixDRC .fitGap -cell $rm_fill_cells
+```
+
+## Shortcut
+
+* `b make innovus_backend`完成全部的后端流程
+* `win`打开Innovus GUI
