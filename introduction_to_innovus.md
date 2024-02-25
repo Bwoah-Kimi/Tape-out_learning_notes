@@ -2,11 +2,13 @@
 
 ## 基础后端流程
 
+以build_adder的tutorial为例，目录位置为：`/work/home/ztzhu/my_projects/tutorials/build_adder_sram_backend/`
+
 1. 打开Innovus和流程Scripts
 	```bash
 	cd work
 	b innovus
-	gvim ../scripts/innovus_scripts.tcl
+	vim ../scripts/innovus_scripts.tcl
 	```
 
 2. 载入综合后的网表 xxx.v
@@ -71,9 +73,9 @@
 	```
 
 * 奇数层为横向金属，偶数层为纵向金属。
-* 在Power routing中，通常预留最顶层的两层金属作为最终设计的电源连接。
-* 在此22nm工艺中，**顶层金属为AP(8)**，因此预留M7、AP作为顶层电源连接。
-* **每个数字模块的最顶层金属为M6**
+* 在Power routing中，通常预留最顶层的**两层金属**作为最终设计的电源连接。
+	* 在此22nm工艺中，**顶层金属为AP(8)**，因此预留M7、AP作为顶层电源连接。
+	* **每个数字模块的最顶层金属为M6**
 
 6. Placement
 	```tcl
