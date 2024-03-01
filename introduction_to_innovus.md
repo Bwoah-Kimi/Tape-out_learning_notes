@@ -357,6 +357,9 @@
 	setPlaceMode -place_detail_legalization_inst_gap 2
 	setPlaceMode -place_detail_use_no_diffusion_one_site_filler false
 	
+	# to address the issue regarding scan chains
+	# setPlaceMode -place_global_ignore_scan false
+	
 	setNanoRouteMode -routeTopRoutingLayer 5
 	setNanoRouteMode -routeBottomRoutingLayer 2
 	setPlaceMode -fp false
@@ -406,3 +409,16 @@
 	setFillerMode -ecoMode true
 	addFiller -fixDRC .fitGap -cell $rm_fill_cells
 	```
+
+## 一些常见报错说明
+
+### IMPSP-9099
+
+* ERROR: (IMPSP-9099): Scan chains exist in this design but are not defined for xx% flops
+* 在`placeDesign`步骤中遇到了这个报错，由于RTL设计为开源项目，暂时没有深究Scan Chain是否有必要/是否可以去除。
+* 扫描链（Scan Chain）是一种常用的数字集成电路（IC）测试技术，属于设计可测试性（Design for Testability, DFT）的范畴。扫描链技术是为了简化数字逻辑电路的测试而引入的，它可以让测试人员更容易地访问和控制芯片内部的触发器（Flip-Flops）
+* 解决方法：
+	* 在`placeDesign`前添加参数选项：`setPlaceMode -place_global_ignore_scan false`
+	* 参考[这篇论坛提问][IMPSP-9099:solution]
+
+[IMPSP-9099:solution]: https://community.cadence.com/cadence_technology_forums/f/digital-implementation/57299/error-impsp-9099-scan-chains-exist-in-this-design-but-are-not-defined-for-xx-flops

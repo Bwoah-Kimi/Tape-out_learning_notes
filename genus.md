@@ -1,5 +1,7 @@
 # Genus Workflow
 
+* 此处介绍了Cadance Genus的数字综合流程，主要涉及到一些基本的脚本修改。
+
 ## RTL数字综合
 
 1. 修改工艺路径
