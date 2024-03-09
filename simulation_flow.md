@@ -1,0 +1,250 @@
+# XiangShan仿真配置
+
+## 概念简介
+
+* DMA
+  * Direct Memory Access (DMA)，直接内存访问，是一种在计算机系统中，允许某些硬件子系统在主内存和设备之间直接传输数据，而无需通过CPU进行中转的技术
+* MMIO
+  * MMIO全称为Memory Mapped I/O（内存映射输入/输出），是一种在计算机系统中，允许CPU使用**内存访问指令**（如LOAD和STORE）来访问设备的方法。在这种方法中，设备的寄存器被映射到系统的地址空间中，就像普通的内存单元一样。
+  * 当CPU向这些特殊的内存地址写入数据时，它实际上是向设备的寄存器写入数据；当CPU从这些地址读取数据时，它实际上是从设备的寄存器读取数据。这种方式使得CPU可以使用相同的指令集来访问内存和设备，从而简化了硬件和软件的设计。
+
+## XSTop.v 接口
+
+我们观察`XSTop.v`中IO定义
+
+```verilog
+module XSTop(
+  output         dma_0_awready,
+  input          dma_0_awvalid,
+  input  [13:0]  dma_0_awid,
+  input  [35:0]  dma_0_awaddr,
+  input  [7:0]   dma_0_awlen,
+  input  [2:0]   dma_0_awsize,
+  input  [1:0]   dma_0_awburst,
+  input          dma_0_awlock,
+  input  [3:0]   dma_0_awcache,
+  input  [2:0]   dma_0_awprot,
+  input  [3:0]   dma_0_awqos,
+  output         dma_0_wready,
+  input          dma_0_wvalid,
+  input  [255:0] dma_0_wdata,
+  input  [31:0]  dma_0_wstrb,
+  input          dma_0_wlast,
+  input          dma_0_bready,
+  output         dma_0_bvalid,
+  output [13:0]  dma_0_bid,
+  output [1:0]   dma_0_bresp,
+  output         dma_0_arready,
+  input          dma_0_arvalid,
+  input  [13:0]  dma_0_arid,
+  input  [35:0]  dma_0_araddr,
+  input  [7:0]   dma_0_arlen,
+  input  [2:0]   dma_0_arsize,
+  input  [1:0]   dma_0_arburst,
+  input          dma_0_arlock,
+  input  [3:0]   dma_0_arcache,
+  input  [2:0]   dma_0_arprot,
+  input  [3:0]   dma_0_arqos,
+  input          dma_0_rready,
+  output         dma_0_rvalid,
+  output [13:0]  dma_0_rid,
+  output [255:0] dma_0_rdata,
+  output [1:0]   dma_0_rresp,
+  output         dma_0_rlast,
+  input          peripheral_0_awready,
+  output         peripheral_0_awvalid,
+  output [3:0]   peripheral_0_awid,
+  output [30:0]  peripheral_0_awaddr,
+  output [7:0]   peripheral_0_awlen,
+  output [2:0]   peripheral_0_awsize,
+  output [1:0]   peripheral_0_awburst,
+  output         peripheral_0_awlock,
+  output [3:0]   peripheral_0_awcache,
+  output [2:0]   peripheral_0_awprot,
+  output [3:0]   peripheral_0_awqos,
+  input          peripheral_0_wready,
+  output         peripheral_0_wvalid,
+  output [63:0]  peripheral_0_wdata,
+  output [7:0]   peripheral_0_wstrb,
+  output         peripheral_0_wlast,
+  output         peripheral_0_bready,
+  input          peripheral_0_bvalid,
+  input  [3:0]   peripheral_0_bid,
+  input  [1:0]   peripheral_0_bresp,
+  input          peripheral_0_arready,
+  output         peripheral_0_arvalid,
+  output [3:0]   peripheral_0_arid,
+  output [30:0]  peripheral_0_araddr,
+  output [7:0]   peripheral_0_arlen,
+  output [2:0]   peripheral_0_arsize,
+  output [1:0]   peripheral_0_arburst,
+  output         peripheral_0_arlock,
+  output [3:0]   peripheral_0_arcache,
+  output [2:0]   peripheral_0_arprot,
+  output [3:0]   peripheral_0_arqos,
+  output         peripheral_0_rready,
+  input          peripheral_0_rvalid,
+  input  [3:0]   peripheral_0_rid,
+  input  [63:0]  peripheral_0_rdata,
+  input  [1:0]   peripheral_0_rresp,
+  input          peripheral_0_rlast,
+  input          memory_0_awready,
+  output         memory_0_awvalid,
+  output [13:0]  memory_0_awid,
+  output [35:0]  memory_0_awaddr,
+  output [7:0]   memory_0_awlen,
+  output [2:0]   memory_0_awsize,
+  output [1:0]   memory_0_awburst,
+  output         memory_0_awlock,
+  output [3:0]   memory_0_awcache,
+  output [2:0]   memory_0_awprot,
+  output [3:0]   memory_0_awqos,
+  input          memory_0_wready,
+  output         memory_0_wvalid,
+  output [255:0] memory_0_wdata,
+  output [31:0]  memory_0_wstrb,
+  output         memory_0_wlast,
+  output         memory_0_bready,
+  input          memory_0_bvalid,
+  input  [13:0]  memory_0_bid,
+  input  [1:0]   memory_0_bresp,
+  input          memory_0_arready,
+  output         memory_0_arvalid,
+  output [13:0]  memory_0_arid,
+  output [35:0]  memory_0_araddr,
+  output [7:0]   memory_0_arlen,
+  output [2:0]   memory_0_arsize,
+  output [1:0]   memory_0_arburst,
+  output         memory_0_arlock,
+  output [3:0]   memory_0_arcache,
+  output [2:0]   memory_0_arprot,
+  output [3:0]   memory_0_arqos,
+  output         memory_0_rready,
+  input          memory_0_rvalid,
+  input  [13:0]  memory_0_rid,
+  input  [255:0] memory_0_rdata,
+  input  [1:0]   memory_0_rresp,
+  input          memory_0_rlast,
+  input          io_clock,
+  input          io_reset,
+  input  [15:0]  io_sram_config,
+  input  [63:0]  io_extIntrs,
+  input          io_pll0_lock,
+  output [31:0]  io_pll0_ctrl_0,
+  output [31:0]  io_pll0_ctrl_1,
+  output [31:0]  io_pll0_ctrl_2,
+  output [31:0]  io_pll0_ctrl_3,
+  output [31:0]  io_pll0_ctrl_4,
+  output [31:0]  io_pll0_ctrl_5,
+  input          io_systemjtag_jtag_TCK,
+  input          io_systemjtag_jtag_TMS,
+  input          io_systemjtag_jtag_TDI,
+  output         io_systemjtag_jtag_TDO_data,
+  output         io_systemjtag_jtag_TDO_driven,
+  input          io_systemjtag_reset,
+  input  [10:0]  io_systemjtag_mfr_id,
+  input  [15:0]  io_systemjtag_part_number,
+  input  [3:0]   io_systemjtag_version,
+  output         io_debug_reset,
+  input          io_rtc_clock,
+  input          io_cacheable_check_req_0_valid,
+  input  [35:0]  io_cacheable_check_req_0_bits_addr,
+  input  [1:0]   io_cacheable_check_req_0_bits_size,
+  input  [2:0]   io_cacheable_check_req_0_bits_cmd,
+  input          io_cacheable_check_req_1_valid,
+  input  [35:0]  io_cacheable_check_req_1_bits_addr,
+  input  [1:0]   io_cacheable_check_req_1_bits_size,
+  input  [2:0]   io_cacheable_check_req_1_bits_cmd,
+  output         io_cacheable_check_resp_0_ld,
+  output         io_cacheable_check_resp_0_st,
+  output         io_cacheable_check_resp_0_instr,
+  output         io_cacheable_check_resp_0_mmio,
+  output         io_cacheable_check_resp_0_atomic,
+  output         io_cacheable_check_resp_1_ld,
+  output         io_cacheable_check_resp_1_st,
+  output         io_cacheable_check_resp_1_instr,
+  output         io_cacheable_check_resp_1_mmio,
+  output         io_cacheable_check_resp_1_atomic,
+  output         io_riscv_halt_0,
+  input  [37:0]  io_riscv_rst_vec_0,
+  input          logEnable,
+  input          io_perfInfo_clean,
+  input  [63:0]  timer,
+  input          io_perfInfo_dump
+);
+```
+
+### dma
+
+```verilog
+  output         dma_0_awready,
+  input          dma_0_awvalid,
+```
+
+一套AXI接口，没有使用
+```scala
+l_soc.module.dma <> 0.U.asTypeOf(l_soc.module.dma)
+```
+
+### peripheral
+
+```verilog
+  input          peripheral_0_awready,
+  output         peripheral_0_awvalid,
+```
+
+一套AXI接口，CPU为Master，Peripheral为Slave
+
+```scala
+  val l_simMMIO = LazyModule(new SimMMIO(l_soc.misc.peripheralNode.in.head._2))
+  val simMMIO = Module(l_simMMIO.module)
+  l_simMMIO.io_axi4 <> soc.peripheral
+```
+
+SoC的Peripheral模块在SimTop中通过AXI4连接到SimMMIO中
+
+* auto_out_3: intrGen
+* auto_out_2: SD
+* auto_out_1: FLASH (boot address: 0x1000_0000)
+* auto_out_0: UART
+
+### memory
+
+```verilog
+  input          memory_0_awready,
+  output         memory_0_awvalid,
+```
+
+一套AXI接口，CPU为Master，Memory为Slave
+
+```scala
+  val simAXIMem = Module(l_simAXIMem.module)
+  l_simAXIMem.io_axi4 <> soc.memory
+```
+
+Memory模块在SimTop中通过AXI4接口
+
+## SimTop.v 接口
+
+```scala
+  val io = IO(new Bundle() {
+    val logCtrl = new LogCtrlIO
+    val perfInfo = new PerfInfoIO
+    val uart = new UARTIO
+  })
+```
+```verilog
+module SimTop(
+  input         clock,
+  input         reset,
+  input  [63:0] io_logCtrl_log_begin,
+  input  [63:0] io_logCtrl_log_end,
+  input  [63:0] io_logCtrl_log_level,
+  input         io_perfInfo_clean,
+  input         io_perfInfo_dump,
+  output        io_uart_out_valid,
+  output [7:0]  io_uart_out_ch,
+  output        io_uart_in_valid,
+  input  [7:0]  io_uart_in_ch
+);
+```

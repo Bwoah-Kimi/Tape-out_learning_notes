@@ -62,7 +62,7 @@ XiangShan是一个规模很大，版本迭代很快的开源项目。截止2024�
 ### 替换SRAM、Register File
 
 生成的Verilog代码中，有几十个`array_xxx_ext.v`文件，被用于DCache、ICache等寄存器堆和高速缓存。
-这些阵列需要用SRAM Compiler、Register File Compiler替换成专门的IP核，能够显著减小设计的面积。
+这些阵列需要用`SRAM Compiler`、`Register File Compiler`替换成专门的IP核，能够显著减小设计的面积。
 为此，这些模块以及调用这些模块的上层模块，需要添加_VSS, VDD_的IO定义与连接。`add_power_pins.py`能够基本实现这个功能，**但是脚本鲁棒性不好，修改完代码后需要double check！**
 
 ## 仿真验证

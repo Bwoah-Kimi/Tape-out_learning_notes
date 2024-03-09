@@ -2,6 +2,11 @@
 
 * 此处介绍了Cadance Genus的数字综合流程，主要涉及到一些基本的脚本修改。
 
+## SRAM/Register File替换
+
+由于许多数字模块中依赖于较大规模的寄存器堆/SRAM高速缓存，这些模块需要替换成专门的IP核，而不是使用RTL代码直接综合，从而可以显著减小模块面积
+主要用到的是ARM提供的SRAM Compiler和Register File Compiler
+
 ## RTL数字综合
 
 1. 修改工艺路径
