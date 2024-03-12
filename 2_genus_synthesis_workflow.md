@@ -22,14 +22,16 @@
 
 在我们自己的模块中使用SRAM Compiler生成的单元，需要生成相应的文件。
 * 在`views`部分选择`LEF Footprint`, `LVS Netlist`, `Liberty Model`, `Verilog Model`
+
 ![sram compiler views](figs/views.png)
 * 在`Corners`菜单中勾选所有的domain与processes，以保证生成综合报告的完整性。
+
 ![sram compiler corners](figs/corners.png)
 
 ### Register File Compiler
 
 与`SRAM Compiler`流程类似。
-![register file compiler](figs/register_filer_compiler.png)
+![register file compiler](figs/register_file_compiler.png)
 
 ## RTL数字综合
 
