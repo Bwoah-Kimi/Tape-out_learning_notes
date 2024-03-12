@@ -69,7 +69,7 @@ XiangShan是一个规模很大，版本迭代很快的开源项目。截止2024�
 
 ### 使用Verilator
 
-* `./build/emu -i WORKLOAD_BIN.bin`即可运行Verilator仿真程序，验证设计是否正确
+* `./build/emu -i WORKLOAD_BIN.bin`即可运行Verilator仿真程序，初步验证设计是否正确
 
 ### 使用VCS
 

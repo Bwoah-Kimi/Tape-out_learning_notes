@@ -1,14 +1,14 @@
 # Innovus learning notes
 
-* 此处大致介绍了Innovus后端流程，为基础的带有SRAM/Register File的后端流程，后者适用性更强，可以主要参考后者的流程。
+* 此处大致介绍了Innovus后端流程，为带有SRAM/Register File的后端流程。
 * 运行Innovus后端需要在Genus synthesis完成的基础上进行。
 * 脚本中许多的参数设置，例如width, spacing，以及MACRO的位置摆放需要根据版图大小以及布线情况来设定，需多次迭代优化。
 
 ## 部分命令说明
 
 * 在讲述具体的后端流程之前，有必要对一些命令进行说明，或许会对后端流程debugging有一定帮助
-* 在运行过程中，如果碰到报错，或者对于某些命令参数选项不确定，可以在Innovus命令行中输入`man <CMDName>`来查看官方Manual以获得相应信息。
-* 个人经验感觉，对于命令的说明较为清晰，配合ChatGPT可以获得较好的效果，而对于报错信息，官方手册以及网络信息都比较欠缺，需更有针对性进行查找。
+* 在运行过程中，如果碰到报错，或者对于某些命令参数选项不确定，可以在Innovus命令行中输入`man <CMD_Name>`来查看官方Manual以获得相应信息。
+* 个人感觉，Manual对于命令的说明较为清晰，配合ChatGPT可以获得较好的效果，而对于报错信息，官方手册以及网络信息都比较欠缺，需更有针对性进行查找。
 
 ### 关于`setMultiCpuUsage`命令
 
@@ -23,13 +23,13 @@
 * 顶层模块集成时，可以考虑减小Routing Blockage的`-spacing`选项，供`ecoRoute`有更多空间布线以修复DRC
 * `-pgnetonly`
 	* Specifies that the routing blockage is to be **applied only on power or ground net** special routes and not on signal nets.
- * This option affects only commands that create special routes, such as `addRing`, `addStripe`, or `sroute`, when they are used for PG nets.
- * `NanoRoute`, which is used to connect tie-high or tie-low connections or to connect to secondary standard-cell power-pin connections, is also not affected by this option.
- * Use this option during power planning to prevent power routes from getting too close to block edges and, as a result, blocking signal pin access or causing congestion in narrow channels.
+ 	* This option affects only commands that create special routes, such as `addRing`, `addStripe`, or `sroute`, when they are used for PG nets.
+	* `NanoRoute`, which is used to connect tie-high or tie-low connections or to connect to secondary standard-cell power-pin connections, is also not affected by this option.
+  * Use this option during power planning to prevent power routes from getting too close to block edges and, as a result, blocking signal pin access or causing congestion in narrow channels.
 * `-exceptpgnet`
 	* Specifies that the routing blockage is to be **applied on a signal net routing** and not on power or ground net routing.
-	 * Use thisoption to block signal routing above or around a sensitive block to avoid noise from nearby signal nets but still allow power connections to go through the blockage.
-	 * Blocking the signal net routing helps in avoiding cross talk or coupling caused by signal routes.
+	* Use thisoption to block signal routing above or around a sensitive block to avoid noise from nearby signal nets but still allow power connections to go through the blockage.
+	* Blocking the signal net routing helps in avoiding cross talk or coupling caused by signal routes.
 
 ### 关于`editPin`命令
 
@@ -78,17 +78,21 @@
 
 ### 关于`createPGPin`命令
 
+* 将最顶层的金属走线作为P/G Pin，因此此处生成的P/G Pin需要和此前使用`addStripe`生成的P/G金属条保持重合。
+* 因为需要保持一定间隔连续生成许多条P/G Pin，可以用一层For循环来减少工作量。
+
 ## 带有SRAM/Register File设计的后端流程
 
 ### 脚本调整
 * 在`./scripts/design_input_macro.tcl`中添加SRAM的LEF
 * 在`./scripts/tech.tcl`中添加SRAM的LIB
+* 对于顶层模块的集成，如果有一些子模块已经完成后端，或是手画的版图，也需要在这两个位置分别加入LIB和LEF文件。
 * 连接Power
-* 如果SRAM的电源为VDD_SRAM，其余单元的电源为VDD，在`./scripts/init_invs.tcl`中修改：
+	* 如果SRAM的电源为VDD_SRAM，其余单元的电源为VDD，在`./scripts/init_invs.tcl`中修改：
 	```tcl
 	set init_pwr_net {VDD VDD_SRAM}
 	```
-* 如果模块中单元与SRAM Macro统一供电，则将上述`init_pwr_net`名字修改与RTL代码保持一致即可
+	* 如果模块中单元与SRAM Macro统一供电，则将上述`init_pwr_net`名字修改与RTL代码保持一致即可
 
 ### 流程说明
 
@@ -128,7 +132,7 @@
 	getIoFlowFlag
 	```
 
-4. 放置SRAM，见[place_macro](./my_scripts/place_macro.tcl)
+4. 放置SRAM，见[place_macro.tcl](./my_scripts/place_macro.tcl)
 	```tcl
 	source ../scripts/place_macro.tcl
 	```
@@ -152,12 +156,12 @@
 		* 例如：`placeInstance $sram_macro 21.0 21.0 R180`
 	* 需要注意，22nm工艺不支持90度旋转
 
-6. 定义Power连接，见[pg_pin](./my_scripts/power_pins.tcl)
+6. 定义Power连接，见[pg_pins.tcl](./my_scripts/pg_pins.tcl)
 	```tcl
 	source ../scripts/power_pins.tcl
 	```
 
-7. 添加管脚，使用`editPin`命令,见[add_pin](./my_scripts/add_pin.tcl)
+7. 添加管脚，使用`editPin`命令,见[add_pin.tcl](./my_scripts/add_pin.tcl)
 	```tcl
 	source ../scripts/add_pin.tcl
 	```
@@ -178,7 +182,7 @@
 	allWellTap -prefix DECAP -cellInterval $rm_tap_cell_distance -cell ${dcap_cell} -skipRow 1
 	```
 
-6. 添加Power Rings, Power Stripes，见[power_ring](./my_scripts/power_ring.tcl)
+6. 添加Power Rings, Power Stripes，见[power_ring.tcl](./my_scripts/power_ring.tcl)
 	```tcl
 	source ../scripts/power_ring.tcl
 
@@ -199,7 +203,7 @@
 7. Placement
 	```tcl
 	setTieHiLoMode  -cell $rm_tie_hi_lo_list \
-					-maxFanout 8
+									-maxFanout 8
 	deleteTieHiLo
 	
 	setPlaceMode -reset
@@ -237,9 +241,9 @@
 	set_ccopt_property clock_gating_cells $rm_clock_icg_cell
 
 	set_ccopt_mode -cts_use_min_max_path_delay false \
-								-cts_target_slew $rm_max_clock_transition \
-								-cts_target_skew 0.15 \
-								-modify_clock_latency false
+								 -cts_target_slew $rm_max_clock_transition \
+								 -cts_target_skew 0.15 \
+								 -modify_clock_latency false
 
 	# set_ccopt_property balance_mode cluster
 	create_ccopt_clock_tree_spec -file ../data/${rm_core_top}-ccopt_cts.spec
@@ -258,12 +262,12 @@
 	setExtractRCMode -engine postRoute -effortLevel medium -tQuantusForPostRoute true
 	
 	set NanoRouteMode -routeWithTimingDriven true \
-			  						-routeWithSiDriven true \
-									-routeWithLithoDriven false \
-			  						-routeDesignRouteClockNetsFirst true \
-									-routeReserveSpaceForMultiCut false \
-						 			-drouteUseMultiCutViaEffort low \
-			  						-drouteFixAntenna true
+					  				-routeWithSiDriven true \
+					  				-routeWithLithoDriven false \
+			  		  			-routeDesignRouteClockNetsFirst true \
+					  				-routeReserveSpaceForMultiCut false \
+					  				-drouteUseMultiCutViaEffort low \
+			  		  			-drouteFixAntenna true
 	
 	routeDesign
 	```
@@ -295,9 +299,9 @@
 11. Add Filler Cells
 	```tcl
 	setFillerMode -scheme locationFirst \
-							-minHole true \
-							-fitGap true \
-							-diffCellViol true
+				  			-minHole true \
+				  			-fitGap true \
+				  			-diffCellViol true
 
 	addFiller -cell $rm_fill_cells
 	ecoRoute -fix_drc
@@ -330,8 +334,8 @@
 13. Generate Files
 	```tcl
 	write_lef_abstract -5.8 -specifyTopLayer M8 \
-                   -PGpinLayers {M8} -stripePin \
-                   -cutObsMinSpacing \
+                  	 -PGpinLayers {M8} -stripePin \
+                   	 -cutObsMinSpacing \
                    ../models/lef/${rm_core_top}.lef
 
 	write_sdf -min_view ff_0p88v_125c_view \
