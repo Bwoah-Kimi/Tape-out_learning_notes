@@ -1,6 +1,5 @@
 # FPGA验证
 
-**This doc is under development**
 
 使用Xilinx Vivado 2019.1进行FPGA验证
 

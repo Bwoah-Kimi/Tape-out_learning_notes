@@ -1,7 +1,5 @@
 # Virtuoso Verfication Workflow
 
-**This doc is under development**
-
 在Innovus完成所有的Place & Route并修复基本上所有的DRC之后，使用Virtuoso：
 * 修复剩余或新增的DRC
 * 检查LVS
@@ -35,7 +33,7 @@
     b ./v2lvs.run
     ```
 
-* 导入LVSRunset文件
+* 导入LVS Runset文件
     * 在Virtuoso窗口上方选择`Calibre`->`nmLVS`
     * 在`Runset File Path`中添加Calibre文件
 * 在左侧`Inputs`->`Netlist`中选择导入`.cdl`格式的SPICE文件

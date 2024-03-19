@@ -1,3 +1,9 @@
-# Tape-out_learning_notes
+# Tape-out Learning Notes
 
-* 此处以ISSCC'25的流片工作作为背景，简要介绍/记录数字电路从综合到后端的大致流程，供自己与他人参考学习。
+This repository hosts the documentation for the Tape-out workflow intended for ISSCC'25.
+
+Please note that this workflow is tailored to my specific working environment. Due to licensing and copyright constraints, I am unable to share all related files in this repository. However, I hope the content provided here can still be beneficial to you.
+
+> **Disclaimer:** This project is currently under development. The accuracy of the documents cannot be fully guaranteed.
+
+Should you have any questions or concerns regarding the workflow, please raise an issue in this repository. I will respond as promptly as possible. :)
