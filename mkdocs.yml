@@ -7,3 +7,20 @@ theme:
     code: JetBrainsMono
   features:
     - navigation.instant
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+  - mkdocs-minify-plugin
+  - mkdocs-material-extensions
+  - mkdocs-material
+
+nav:
+  - Home: index.md
+  - Simulation: 1_code_modification_and_simulation_workflow.md
+  - FPGA: 2_FPGA_verification_workflow.md
+  - Genus Synthesis: 3_genus_synthesis_workflow.md
+  - Innovus Implementation: 4_innovus_backend_workflow.md
+  - Virtuoso Implementation: 5_virtuoso_verification.md
