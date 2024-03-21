@@ -1,0 +1,1059 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../3_genus_synthesis_workflow/">
+      
+      
+        <link rel="next" href="../5_virtuoso_verification/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.14">
+    
+    
+      
+        <title>Innovus learning notes - My Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.10ba22f1.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrainsMono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrainsMono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#innovus-learning-notes" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="My Docs" class="md-header__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Innovus learning notes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="My Docs" class="md-nav__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    My Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Welcome to my Tape-out Learning Notes!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_code_modification_and_simulation_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    面向流片的XiangShan配置与仿真
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_FPGA_verification_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FPGA验证
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_genus_synthesis_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Genus Workflow
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Innovus learning notes
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Innovus learning notes
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      部分命令说明
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="部分命令说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setmulticpuusage" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于setMultiCpuUsage命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createrouteblk" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于createRouteBlk命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editpin" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于editPin命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addendcap" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addEndCap命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addwelltap" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addWellTap命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addring" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addRing命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addstripe" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addStripe命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createpgpin" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于createPGPin命令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sramregister-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      带有SRAM/Register File设计的后端流程
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="带有SRAM/Register File设计的后端流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      脚本调整
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      流程说明
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_virtuoso_verification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Virtuoso Verfication Workflow
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      部分命令说明
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="部分命令说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setmulticpuusage" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于setMultiCpuUsage命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createrouteblk" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于createRouteBlk命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editpin" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于editPin命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addendcap" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addEndCap命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addwelltap" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addWellTap命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addring" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addRing命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addstripe" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addStripe命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createpgpin" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于createPGPin命令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sramregister-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      带有SRAM/Register File设计的后端流程
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="带有SRAM/Register File设计的后端流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      脚本调整
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      流程说明
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="innovus-learning-notes">Innovus learning notes</h1>
+<ul>
+<li>此处大致介绍了Innovus后端流程，为带有SRAM/Register File的后端流程。</li>
+<li>运行Innovus后端需要在Genus synthesis完成的基础上进行。</li>
+<li>脚本中许多的参数设置，例如width, spacing，以及MACRO的位置摆放需要根据版图大小以及布线情况来设定，需多次迭代优化。</li>
+</ul>
+<h2 id="_1">部分命令说明</h2>
+<ul>
+<li>在讲述具体的后端流程之前，有必要对一些命令进行说明，或许会对后端流程debugging有一定帮助</li>
+<li>在运行过程中，如果碰到报错，或者对于某些命令参数选项不确定，可以在Innovus命令行中输入<code>man &lt;CMD_Name&gt;</code>来查看官方Manual以获得相应信息。</li>
+<li>个人感觉，Manual对于命令的说明较为清晰，配合ChatGPT可以获得较好的效果，而对于报错信息，官方手册以及网络信息都比较欠缺，需更有针对性进行查找。</li>
+</ul>
+<h3 id="setmulticpuusage">关于<code>setMultiCpuUsage</code>命令</h3>
+<ul>
+<li>若使用<code>setMultiCpuUsage -localCpu max -cpuAutoAdjust true -verbose</code>，可能会导致Innovus闪退。大致原因是CPU核数过多，导致服务器终止进程。</li>
+<li>建议使用<code>setMultiCpuUsage -localCpu 32</code>，可以保证Innovus稳定运行。</li>
+</ul>
+<h3 id="createrouteblk">关于<code>createRouteBlk</code>命令</h3>
+<ul>
+<li>Description: creates a routing blockage object. The object area prevents routing of specified metal layers, signal routes and hierarchical instances in this area.</li>
+<li>对于顶层模块集成的后端流程，需要考虑使用该命令</li>
+<li>SRAM/Register File的LEF文件中定义了哪些Layer被占用，无需另外使用<code>createRouteBlk</code>在SRAM/Register File周围设置Routing Blockage</li>
+<li>顶层模块集成时，可以考虑减小Routing Blockage的<code>-spacing</code>选项，供<code>ecoRoute</code>有更多空间布线以修复DRC</li>
+<li><code>-pgnetonly</code><ul>
+<li>Specifies that the routing blockage is to be <strong>applied only on power or ground net</strong> special routes and not on signal nets.</li>
+<li>This option affects only commands that create special routes, such as <code>addRing</code>, <code>addStripe</code>, or <code>sroute</code>, when they are used for PG nets.</li>
+<li><code>NanoRoute</code>, which is used to connect tie-high or tie-low connections or to connect to secondary standard-cell power-pin connections, is also not affected by this option.</li>
+</ul>
+</li>
+<li>Use this option during power planning to prevent power routes from getting too close to block edges and, as a result, blocking signal pin access or causing congestion in narrow channels.</li>
+<li><code>-exceptpgnet</code><ul>
+<li>Specifies that the routing blockage is to be <strong>applied on a signal net routing</strong> and not on power or ground net routing.</li>
+<li>Use this option to block signal routing above or around a sensitive block to avoid noise from nearby signal nets but still allow power connections to go through the blockage.</li>
+<li>Blocking the signal net routing helps in avoiding cross talk or coupling caused by signal routes.</li>
+</ul>
+</li>
+</ul>
+<h3 id="editpin">关于<code>editPin</code>命令</h3>
+<ul>
+<li>对于大部分的数字模块，管脚数量是成百上千的，无法手动写命令设置每一个管脚。</li>
+<li>在Innovus GUI界面中上方工具栏选择<code>Edit -&gt; Pin Editor</code>根据需求添加管脚。</li>
+<li>在<code>innovus.cmd</code>文件中可以看到每一步操作对应的命令，其中就有我们所需要的<code>editPin</code>命令。</li>
+<li>由于奇数层为横向金属，偶数层为纵向金属，因此对于Top/Bottom可以选择M4/M6等金属，Left/Right可以选择M3/M5等金属。</li>
+<li><strong>注意</strong>：<ul>
+<li>模块的P/G不需要在这一步设置管脚。在布局布线完成之后，将会使用<code>createPGPin</code>生成专门的P/G管脚。</li>
+<li>查看命令是否有多余的选项，例如<code>-USE GROUND</code>，可能会导致后续步骤（例如CTS）无法进行</li>
+</ul>
+</li>
+</ul>
+<h3 id="addendcap">关于<code>addEndCap</code>命令</h3>
+<ul>
+<li>In digital IC design, especially with automated P&amp;R tools, the standard cells are organized in rows throughout the silicon area.</li>
+<li>These standard cells are the building blocks of the design, containing logic gates, flip-flops, and other digital circutry.</li>
+<li>Endcap cells are used to <strong>fill the remaining space at the ends of standard cell rows</strong> when the last standard cell doesn't perfectly fit in the row's length.</li>
+<li>They <strong>provide electrical and physical isolation</strong> between the active area of the silicon and the surrounding structures, suc has the scribe line or the edge of the die.</li>
+</ul>
+<h3 id="addwelltap">关于<code>addWellTap</code>命令</h3>
+<ul>
+<li>Welltap cells <strong>ensure proper electrical connection and prevent latch-up</strong> in CMOS processes.</li>
+<li>Welltap cells help prevent latch-up by <strong>providing a low-resistance path to ground or VDD for the substrate or well</strong> in which transistors are fabricated.</li>
+<li>Welltaps are strategically placed throughout the IC layout, especially near power and ground connections. </li>
+<li>Their placement is often governed by design rules specified by the foundry.</li>
+</ul>
+<h3 id="addring">关于<code>addRing</code>命令</h3>
+<p>** 简单来说，在模块的四周，以及内部MACRO（例如SRAM/Register File）的四周需添加Power ring，用于給旁边的功能单元供电
+* A power ring <strong>provides a continuous path for power and ground connections</strong> around the periphery of the core area of the entire chip.
+* This ring is essential for distributing power and ground connections uniformly across the chip to ensure that all parts of the IC receive a stable power supply and maintain a solid ground reference.
+* Purpose and functionality: stable power supply, noise reduction, thermal management</p>
+<h3 id="addstripe">关于<code>addStripe</code>命令</h3>
+<ul>
+<li>A power stripe is a layout technique used to provide stable power (VDD) and ground (GND) connections to the various logic units and circuit blocks on the chip.</li>
+<li>Power stripes are implemented by introducing wide metal lines (stripes) into the chip layout that connect to the power and ground supply, ensuring that power distribution across the chip is uniform and grounding is effective.</li>
+<li>Benefits<ul>
+<li>Reducing Voltage Drop (IR Drop)</li>
+<li>Reducing Electromagnetic Interference (EMI)</li>
+<li>Improving Efficiency of Power Distribution</li>
+<li>Power Management</li>
+</ul>
+</li>
+<li>简单来说，需要在版图的全部区域添加Power stripe</li>
+<li>偶数层设置<code>-direction vertical</code>，奇数层设置<code>-direction horizontal</code>，由此构成Power mesh（供电网格）</li>
+<li>为了避免底层金属布线过于密集，可以考虑在较低层金属（例如M6）设置较为稀疏的Power stripe，在较高层金属（例如M8）设置较为密集</li>
+<li>后续使用<code>sroute</code>命令将Power stripe连接起来，只需连接到最低层的Power stripe即可。</li>
+</ul>
+<h3 id="createpgpin">关于<code>createPGPin</code>命令</h3>
+<ul>
+<li>将最顶层的金属走线作为P/G Pin，因此此处生成的P/G Pin需要和此前使用<code>addStripe</code>生成的P/G金属条保持重合。</li>
+<li>因为需要保持一定间隔连续生成许多条P/G Pin，可以用一层For循环来减少工作量。</li>
+</ul>
+<h2 id="sramregister-file">带有SRAM/Register File设计的后端流程</h2>
+<h3 id="_2">脚本调整</h3>
+<ul>
+<li>在<code>./scripts/design_input_macro.tcl</code>中添加SRAM/Register File的<code>LEF</code></li>
+<li>在<code>./scripts/tech.tcl</code>中添加SRAM/Register File的<code>LIB</code></li>
+<li>对于顶层模块的集成，如果有一些子模块已经完成后端，也需要在这两个位置分别加入<code>LIB</code>和<code>LEF</code>文件。实际上<code>LIB</code>文件应该在Genus综合前就添加，否则综合时无法读取其所需的时序信息。</li>
+<li>连接Power<ul>
+<li>在<code>./scripts/init_invs.tcl</code>中修改模块的P/G Connection。</li>
+<li>如果需要区分电源域，例如SRAM需要单独供电，则需要在此定义<code>VDD</code>, <code>VDD_SRAM</code>两个Power Net
+<code>tcl
+set init_pwr_net {VDD VDD_SRAM}</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="_3">流程说明</h3>
+<p>此处以<code>Jan15_HuanCun</code>模块的后端流程为例</p>
+<ol>
+<li>
+<p>启动Innovus
+    <code>bash
+    cd /work/home/ztzhu/my_projects/xiangshan/Jan15/backend_huancun/
+    gvim huancun_innovus_script.tcl &amp; cd work
+    b innovus</code></p>
+</li>
+<li>
+<p>载入设计
+    在Innovus的命令行中输入如下命令，下同
+    <code>tcl
+    date
+    setMultiCpuUsage -localCpu 32
+    set start_time [clock seconds]
+    source -verbose ../scripts/core_config.tcl
+    source -verbose ../scripts/tech.tcl
+    source -verbose ../scripts/init_invs.tcl
+    source -verbose ../scripts/invs_settings.tcl</code></p>
+</li>
+<li>
+<p>设置FloorPlan</p>
+<ul>
+<li>根据Genus综合的面积报告以及整体版图规划选择版图的长和宽</li>
+<li>Innovus右上角的Floorplan View可以看到SRAM/Register File等MACRO的大小
+<img alt="Floorplan View" src="../figs/floorplan.png" />
+```tcl
+set cell_height 0.7
+set macro_halo_spc [expr 1 * $cell_height]
+set macro_halo_spc_4 [expr 4 * $cell_height]
+set macro_halo_spc_2 [expr 2 * $cell_height]</li>
+</ul>
+<h1 id="set-macro_halo_spc-expr-4-cell_height">set macro_halo_spc [expr 4 * $cell_height]</h1>
+<p>set die_sizex 900
+set die_sizey 850
+floorPlan -d $die_sizex $die_sizey 3.5 3.5 3.5 3.5
+uiSetTool select
+getIoFlowFlag
+```</p>
+</li>
+<li>
+<p>放置SRAM，见<a href="../my_scripts/place_macro.tcl">place_macro.tcl</a>
+    <code>tcl
+    source ../scripts/place_macro.tcl</code></p>
+</li>
+<li>
+<p>在SRAM/Register File和其他MACRO的周围添加Halo，并根据情况设置Routing Blockage
+    ```tcl
+    # add Halos around MACROS
+    setInstancePlacementStatus -allHardMacros -status fixed
+    addHaloToBlock [list $macro_halo_spc_4 $macro_halo_spc_4 $macro_halo_spc_4 $macro_halo_spc_4] -allMacro</p>
+<h1 id="add-routing-blockage-if-necessary">add Routing Blockage if necessary</h1>
+<p>for {set i 0 } {$i &lt;= 7 } {incr $i} {
+    set macroName "sram_$i"
+    createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
+}
+for {set i 0 } {$i &lt;= 6 } {incr $i} {
+    set macroName "rf_$i"
+    createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
+}
+<code>``
+* 可以通过添加</code>RO R90 R180 MX MX90 MY MY90<code>等决定SRAM的摆放方向
+    * 例如：</code>placeInstance $sram_macro 21.0 21.0 R180`
+* 需要注意，22nm工艺不支持90度旋转</p>
+</li>
+<li>
+<p>定义Power连接，见<a href="../my_scripts/pg_pin.tcl">pg_pin.tcl</a>
+    <code>tcl
+    source ../scripts/power_pins.tcl</code></p>
+</li>
+<li>
+<p>添加管脚，使用<code>editPin</code>命令,见<a href="../my_scripts/add_pin.tcl">add_pin.tcl</a>
+    <code>tcl
+    source ../scripts/add_pin.tcl</code></p>
+</li>
+<li>
+<p>添加EndCap, WellTap
+    ```tcl
+    set itx $rm_tap_cell_distance
+    set tap_rule [expr $itx/4]</p>
+<p>setPlaceMode -place_detail_legalization_inst_gap 2
+setPlaceMode -place_detail_use_no_diffusion_one_site_filler false</p>
+<p>setEndCapMode -reset
+setEndCapMode -rightEdge $endcap_left -leftEdge $endcap_right
+addEndCap</p>
+<p>addWellTap -cell ${rm_tap_cell} -cellInterval $rm_tap_cell_distance -checkerboard
+allWellTap -prefix DECAP -cellInterval $rm_tap_cell_distance -cell ${dcap_cell} -skipRow 1
+```</p>
+</li>
+<li>
+<p>添加Power Rings, Power Stripes，见<a href="../my_scripts/power_ring.tcl">power_ring.tcl</a>
+    ```tcl
+    source ../scripts/power_ring.tcl</p>
+<h1 id="add-power-stripes-at-four-sides-of-sram">add power stripes at four sides of SRAM</h1>
+<h1 id="m6-vertical">M6 (Vertical)</h1>
+<p>addStripe -start_offset 0.7 -direction vertical -block_ring_top_layer_limit M6 -padcore_ring_bottom_layer M1 -set_to_set_distance 30 -stacked_via_top_layer M6 -padcore_ring_top_layer_limit M6 -spacing 15 -layer M6 -block_ring_bottom_layer_limit M1 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M1</p>
+<h1 id="m7-horizontal">M7 (Horizontal)</h1>
+<p>addStripe -start_offset 0.7 -direction horizontal -block_ring_top_layer_limit M7 -padcore_ring_bottom_layer M6 -set_to_set_distance 20 -stacked_via_top_layer M7 -padcore_ring_top_layer_limit M7 -spacing 10 -layer M7 -block_ring_bottom_layer_limit M6 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M6</p>
+<h1 id="m8-vertical">M8 (Vertical)</h1>
+<p>addStripe -start_offset 10 -direction vertical -block_ring_top_layer_limit M8 -padcore_ring_bottom_layer M6 -set_to_set_distance 20 -stacked_via_top_layer M8 -padcore_ring_top_layer_limit M8 -spacing 10 -layer M8 -block_ring_bottom_layer_limit M6 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M6</p>
+<p>sroute -connect { corePin } -layerChangeRange { M1 M6 } -blockPinTarget { nearestRingStripe nearestTarget } -padPinPortConnect { allPort oneGeom } -checkAlignedSecondaryPin 1 -blockPin useLef  -allowJogging 0 -crossoverViaBottomLayer M1 -allowLayerChange 1 -targetViaTopLayer M6 -crossoverViaTopLayer M6 -targetViaBottomLayer M1 -nets {VDD VSS VDD_SRAM}</p>
+<p>editPowerVia -skip_via_on_pin Standardcell -bottom_layer M1 -add_vias 1 -top_layer M6
+```
+* 应当可以看到走在SRAM/Register File MACRO上的Power。以下图为例，可以看到M6层的Power Stripe到M4层SRAM VDD的VIA，说明给该MACRO提供了供电。</p>
+</li>
+<li>
+<p>Placement</p>
+<ul>
+<li><code>-routeTopRoutingLayer 7</code>说明允许信号线最高使用M7层的金属。根据整体版图情况，可以选择M5-M7层作为布信号线所允许的最高层金属。通常来说，版图最高层金属只会有P/G电源线，在此例中，为M8层金属。</li>
+<li><code>-routeBottomRoutingLayer 2</code>说明允许信号线最低使用M2层的金属。
+```tcl
+setTieHiLoMode  -cell $rm_tie_hi_lo_list \
+                                -maxFanout 8
+deleteTieHiLo</li>
+</ul>
+<p>setPlaceMode -reset
+setPlaceMode -place_detail_legalization_inst_gap 2
+setPlaceMode -place_detail_use_no_diffusion_one_site_filler false</p>
+<h1 id="to-address-the-issue-regarding-scan-chains">to address the issue regarding scan chains</h1>
+<h1 id="setplacemode-place_global_ignore_scan-false">setPlaceMode -place_global_ignore_scan false</h1>
+<p>setNanoRouteMode -routeTopRoutingLayer 7
+setNanoRouteMode -routeBottomRoutingLayer 2
+setPlaceMode -fp false
+setAnalysisMode -aocv false</p>
+<p>placeDesign
+addTieHiLo</p>
+<p>place_opt_design -incremental  -out_dir ../reports/layout/INNOVUS_RPT -prefix place
+timeDesign -preCTS -outDir ../reports/layout/INNOVUS_RPT</p>
+<h1 id="prects-reports">preCTS reports</h1>
+<p>set myOption "preCTS"
+source ../scripts/intermediate_reporting.tcl
+```</p>
+</li>
+<li>
+<p>Clock Tree Synthesis (CTS)
+    ```tcl
+    set_ccopt_property -update_io_latency true
+    set_ccopt_property -force_update_io_latency true
+    set_ccopt_property -enable_all_views_for_io_latency_update true
+    set_ccopt_property -max_fanout ${rm_cts_max_fanout}
+    set_ccopt_property -effort high
+    set_ccopt_property buffer_cells $rm_clock_buf_cap_cell
+    set_ccopt_property inverter_cells $rm_clock_inv_cap_cell
+    set_ccopt_property clock_gating_cells $rm_clock_icg_cell</p>
+<p>set_ccopt_mode -cts_use_min_max_path_delay false \
+                             -cts_target_slew $rm_max_clock_transition \
+                             -cts_target_skew 0.15 \
+                             -modify_clock_latency false</p>
+<h1 id="set_ccopt_property-balance_mode-cluster">set_ccopt_property balance_mode cluster</h1>
+<p>create_ccopt_clock_tree_spec -file ../data/${rm_core_top}-ccopt_cts.spec
+create_ccopt_clock_tree_spec</p>
+<p>ccopt_design -check_prerequisites
+ccopt_design -outDir ../reports/layout/INNOVUS_RPT -prefix ccopt</p>
+<h1 id="report-design-after-cts">Report design after CTS</h1>
+<p>set myOption "clocks"
+source ../scripts/intermediate_reporting.tcl
+```</p>
+</li>
+<li>
+<p>Route
+    ```tcl
+    setExtractRCMode -engine postRoute -effortLevel medium -tQuantusForPostRoute true</p>
+<p>set NanoRouteMode -routeWithTimingDriven true \
+                                -routeWithSiDriven true \
+                                -routeWithLithoDriven false \
+                            -routeDesignRouteClockNetsFirst true \
+                                -routeReserveSpaceForMultiCut false \
+                                -drouteUseMultiCutViaEffort low \
+                            -drouteFixAntenna true</p>
+<p>routeDesign
+```</p>
+</li>
+<li>
+<p>Post-route
+    ```tcl
+    setExtractRCMode -engine postRoute -effortLeve medium -tQuantusForPostRoute true
+    setOptMode -verbose true
+    setOptMode -highEffortOptCells $hold_fixing_cells
+    setOptMode -holdFixingCells $hold_fixing_cells
+    optDesign -postRoute -drv
+    optDesign -postRoute -incr
+    optDesign -postRoute -hold</p>
+<p>timeDesign -postRoute -outDir ../reports/layout/INNOVUS_RPT
+timeDesign -postRoute -hold -outDir ../reports/layout/INNOVUS_RPT</p>
+<h1 id="report-design-after-routing">Report design after routing</h1>
+<p>set myOption "postRoute"
+source ../scripts/intermediate_reporting.tcl</p>
+<h1 id="incrementtal-routing-to-fix-shorts">Incrementtal routing to fix shorts</h1>
+<p>addTieHiLo</p>
+<p>setNanoRouteMode -routeWithEco true -drouteFixAntenna true -routeInsertAntennaDiode true
+globalDetailRoute
+```</p>
+</li>
+<li>
+<p>Add Filler Cells
+    ```tcl
+    setFillerMode -scheme locationFirst \
+                            -minHole true \
+                            -fitGap true \
+                            -diffCellViol true</p>
+<p>addFiller -cell $rm_fill_cells
+ecoRoute -fix_drc</p>
+<p>setFillerMode -ecoMode true
+addFiller -fixDRC -fitGap -cell $rm_fill_cells
+```</p>
+</li>
+<li>
+<p>Create P/G Pins
+    在此处定义的P/G管脚与此前定义的最顶层的Power Stripe重叠。在此例中，是M8层金属。
+    ```tcl
+    # create PG Pins
+    for { set i 0} {$i &lt;= 22 } {incr i} {
+        set initX [expr 10 + $i * 40]
+        set initY 3.5
+        set stripeHeight 843
+        set stripeWidth 2 <br />
+        createPGPin VDD -geom M8 $initX $initY [expr $initX + $stripeWidth] [expr $initY + $stripeHeight]
+    }</p>
+<p>for { set i 0 } {$i &lt;= 22 } {incr i} {
+set initX [expr 20 + $i * 40]
+set initY 3.5
+set stripeHeight 843
+set stripeWidth 2<br />
+createPGPin VDD -geom M8 $initX $initY [expr $initX + $stripeWidth] [expr $initY + $stripeHeight]
+}
+```</p>
+</li>
+<li>
+<p>Generate Files
+    ```tcl
+    write_lef_abstract -5.8 -specifyTopLayer M8 \
+                     -PGpinLayers {M8} -stripePin \
+                     -cutObsMinSpacing \
+                   ../models/lef/${rm_core_top}.lef</p>
+<p>write_sdf -min_view ff_0p88v_125c_view \
+        -typ_view tt_0p80v_25c_view \
+        -max_view ss_0p72v_m40c_view \
+        -recompute_parallel_arcs ../models/sdf/${rm_core_top}.sdf</p>
+<p>write_sdc ../models/sdc/${rm_core_top}.sdc</p>
+<p>streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
+        -merge "/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds"
+        /path/to/my/sram/gds \
+        /path/to/my/macro/gds" </p>
+<p>saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells
+```</p>
+</li>
+<li>
+<p>Signoff
+    ```tcl
+    # save the deisgn for signoff
+    saveDesign ${rm_core_top}.signoff.enc</p>
+<p>set stop_time [clock seconds]
+set elapsedTime [clock format [expr $stop_time - $start_time] -format %H:%M:%S -gmt true]
+puts "=============================================="
+puts "        Elapsed runtime : $elapsedTime"
+puts "=============================================="</p>
+<p>date
+```</p>
+</li>
+</ol>
+<h2 id="_4">一些常见报错说明</h2>
+<h3 id="impsp-9099">IMPSP-9099</h3>
+<ul>
+<li>ERROR: (IMPSP-9099): Scan chains exist in this design but are not defined for xx% flops</li>
+<li>在<code>placeDesign</code>步骤中遇到了这个报错。</li>
+<li>扫描链（Scan Chain）是一种常用的数字集成电路（IC）测试技术，属于设计可测试性（Design for Testability, DFT）的范畴。扫描链技术是为了简化数字逻辑电路的测试而引入的，它可以让测试人员更容易地访问和控制芯片内部的触发器（Flip-Flops）</li>
+<li>可能的解决方法：<ul>
+<li>在<code>placeDesign</code>前添加参数选项：<code>setPlaceMode -place_global_ignore_scan false</code></li>
+<li>参考<a href="https://community.cadence.com/cadence_technology_forums/f/digital-implementation/57299/error-impsp-9099-scan-chains-exist-in-this-design-but-are-not-defined-for-xx-flops">这篇论坛提问</a></li>
+</ul>
+</li>
+<li><strong>不理会这个报错也不影响后续流程</strong></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.bd41221c.min.js"></script>
+      
+    
+  </body>
+</html>

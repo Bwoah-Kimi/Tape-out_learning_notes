@@ -28,7 +28,7 @@
   * Use this option during power planning to prevent power routes from getting too close to block edges and, as a result, blocking signal pin access or causing congestion in narrow channels.
 * `-exceptpgnet`
 	* Specifies that the routing blockage is to be **applied on a signal net routing** and not on power or ground net routing.
-	* Use thisoption to block signal routing above or around a sensitive block to avoid noise from nearby signal nets but still allow power connections to go through the blockage.
+	* Use this option to block signal routing above or around a sensitive block to avoid noise from nearby signal nets but still allow power connections to go through the blockage.
 	* Blocking the signal net routing helps in avoiding cross talk or coupling caused by signal routes.
 
 ### 关于`editPin`命令
@@ -84,15 +84,15 @@
 ## 带有SRAM/Register File设计的后端流程
 
 ### 脚本调整
-* 在`./scripts/design_input_macro.tcl`中添加SRAM的LEF
-* 在`./scripts/tech.tcl`中添加SRAM的LIB
-* 对于顶层模块的集成，如果有一些子模块已经完成后端，或是手画的版图，也需要在这两个位置分别加入LIB和LEF文件。
+* 在`./scripts/design_input_macro.tcl`中添加SRAM/Register File的`LEF`
+* 在`./scripts/tech.tcl`中添加SRAM/Register File的`LIB`
+* 对于顶层模块的集成，如果有一些子模块已经完成后端，也需要在这两个位置分别加入`LIB`和`LEF`文件。实际上`LIB`文件应该在Genus综合前就添加，否则综合时无法读取其所需的时序信息。
 * 连接Power
-	* 如果SRAM的电源为VDD_SRAM，其余单元的电源为VDD，在`./scripts/init_invs.tcl`中修改：
+	* 在`./scripts/init_invs.tcl`中修改模块的P/G Connection。
+	* 如果需要区分电源域，例如SRAM需要单独供电，则需要在此定义`VDD`, `VDD_SRAM`两个Power Net
 	```tcl
 	set init_pwr_net {VDD VDD_SRAM}
 	```
-	* 如果模块中单元与SRAM Macro统一供电，则将上述`init_pwr_net`名字修改与RTL代码保持一致即可
 
 ### 流程说明
 
@@ -106,6 +106,7 @@
 	```
 
 2. 载入设计
+	在Innovus的命令行中输入如下命令，下同
 	```tcl
 	date
 	setMultiCpuUsage -localCpu 32
@@ -117,8 +118,9 @@
 	```
 
 3. 设置FloorPlan
-	*	根据SRAM的大小和长宽选择版图面积
+	*	根据Genus综合的面积报告以及整体版图规划选择版图的长和宽
 	*	Innovus右上角的Floorplan View可以看到SRAM/Register File等MACRO的大小
+	![Floorplan View](./figs/floorplan.png)
 	```tcl
 	set cell_height 0.7
 	set macro_halo_spc [expr 1 * $cell_height]
@@ -145,18 +147,18 @@
 	# add Routing Blockage if necessary
 	for {set i 0 } {$i <= 7 } {incr $i} {
 		set macroName "sram_$i"
-		createRouteBlk -cover -inst [set $macroName] -pgnetonly -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
+		createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
 	}
 	for {set i 0 } {$i <= 6 } {incr $i} {
 		set macroName "rf_$i"
-		createRouteBlk -cover -inst [set $macroName] -pgnetonly -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
+		createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
 	}
 	```
 	* 可以通过添加`RO R90 R180 MX MX90 MY MY90`等决定SRAM的摆放方向
 		* 例如：`placeInstance $sram_macro 21.0 21.0 R180`
 	* 需要注意，22nm工艺不支持90度旋转
 
-6. 定义Power连接，见[pg_pins.tcl](./my_scripts/pg_pins.tcl)
+6. 定义Power连接，见[pg_pin.tcl](./my_scripts/pg_pin.tcl)
 	```tcl
 	source ../scripts/power_pins.tcl
 	```
@@ -189,8 +191,10 @@
 	# add power stripes at four sides of SRAM
 	# M6 (Vertical)
 	addStripe -start_offset 0.7 -direction vertical -block_ring_top_layer_limit M6 -padcore_ring_bottom_layer M1 -set_to_set_distance 30 -stacked_via_top_layer M6 -padcore_ring_top_layer_limit M6 -spacing 15 -layer M6 -block_ring_bottom_layer_limit M1 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M1
+	
 	# M7 (Horizontal)
 	addStripe -start_offset 0.7 -direction horizontal -block_ring_top_layer_limit M7 -padcore_ring_bottom_layer M6 -set_to_set_distance 20 -stacked_via_top_layer M7 -padcore_ring_top_layer_limit M7 -spacing 10 -layer M7 -block_ring_bottom_layer_limit M6 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M6
+	
 	# M8 (Vertical)
 	addStripe -start_offset 10 -direction vertical -block_ring_top_layer_limit M8 -padcore_ring_bottom_layer M6 -set_to_set_distance 20 -stacked_via_top_layer M8 -padcore_ring_top_layer_limit M8 -spacing 10 -layer M8 -block_ring_bottom_layer_limit M6 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M6
 	
@@ -198,9 +202,11 @@
 	
 	editPowerVia -skip_via_on_pin Standardcell -bottom_layer M1 -add_vias 1 -top_layer M6
 	```
-	* 应当可以看到走在SRAM/Register File MACRO上的Power
+	* 应当可以看到走在SRAM/Register File MACRO上的Power。以下图为例，可以看到M6层的Power Stripe到M4层SRAM VDD的VIA，说明给该MACRO提供了供电。
 
 7. Placement
+	* `-routeTopRoutingLayer 7`说明允许信号线最高使用M7层的金属。根据整体版图情况，可以选择M5-M7层作为布信号线所允许的最高层金属。通常来说，版图最高层金属只会有P/G电源线，在此例中，为M8层金属。
+	* `-routeBottomRoutingLayer 2`说明允许信号线最低使用M2层的金属。
 	```tcl
 	setTieHiLoMode  -cell $rm_tie_hi_lo_list \
 									-maxFanout 8
@@ -311,7 +317,7 @@
 	```
 
 12. Create P/G Pins
-	在此处定义的P/G管脚与此前定义的最顶层的Power Stripe重叠
+	在此处定义的P/G管脚与此前定义的最顶层的Power Stripe重叠。在此例中，是M8层金属。
 	```tcl
 	# create PG Pins
 	for { set i 0} {$i <= 22 } {incr i} {
@@ -347,6 +353,8 @@
 
 	streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
 			-merge "/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds"
+			/path/to/my/sram/gds \
+            /path/to/my/macro/gds" 
 
 	saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells
 	```
