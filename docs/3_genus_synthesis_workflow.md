@@ -112,13 +112,53 @@
 
 ## Gate-level的数字仿真
 
-> **This part is under development**
+在数字综合之后，对生成的Gate level netlist进行带有SDF的仿真是非常有必要的，可以确认生成的Gate level netlist逻辑正确。
 
-* 进行带有SDF的仿真，确保生成的gate level netlist逻辑正确
-* **需要在testbench中将SDF文件annotate**
-	```verilog
-	initial begin
-	$sdf_annotate("../models/sdf/adder_8bit.sdf", ADDER,,, "MAXIMUM", "1.6:1.4:1.2", "FROM_MTM");
-	```
-* `b make compile_gate`
-* `b make verdi` 打开波形图
+进入`./tb/`文件夹
+
+准备Testbench，一个示例大致如下：
+```verilog
+parameter CLOCK_PERIOD = 5.0;
+module tb_top();
+reg clock;
+reg reset;
+initial begin
+	$sdf_annotate("../data/TOP_MODULE_func_tt_0p80v_25c.sdf", dut, ,, "MAXIMUM", "1.6:1.4:1.2", "FROM_MTM");
+	$fsdbDumpfile("waveform");
+	$fsdbDumpvars("+all");
+end
+
+initial begin
+	clock = 1'b1;
+	reset = 1'b1;
+	#(CLOCK_PERIOD * 10) reset = 1'b0;
+	#(CLOCK_PERIOD * 200) $finish;
+
+always #(CLOCK_PERIOD/2) clock <= ~clock;
+
+TOP_MODULE dut(
+	.clock(clock),
+	.reset(reset)
+);
+endmodule
+```
+
+* 在这个示例中，`$sdf_annotate`选项导入了tt corner的时序信息，同样地，也可以导入ss corner或ff corner的SDF文件。
+* `$fsdbDumpfile(waveform)`选项会生成名为`waveform`的波形文件，可以后续使用Verdi查看波形。
+* `$fsdbDumpvars("+all")`选项会生成所有变量的波形。
+* 这个示例仅仅给顶层模块时钟信号与复位信号，如果想要验证逻辑正确，还需要其余更为复杂的激励。
+
+修改`Makefile`，替换RTL路径以及Testbench文件。如果模块调用了SRAM Compiler生成的Memory或者有其余的子模块，也需要将RTL文件添加到`GATE`变量中。
+```Makefile
+GATE = ../data/TOP-MODULE-genus.v 
+
+compile_gate:
+	${LOAD_VCS}; vcs $(VCS_OPTIONS) testbench.v $(GATE) $(LIB) -R -fsdb
+```
+
+运行`b make compile_gate`进行VCS仿真。
+运行`b make verdi` 打开波形图。该命令调用`Makefile`中的如下指令，确保波形文件名称与Testbench中保持一致。
+```Makefile
+verdi:
+	${LOAD_VERDI}; verdi -ssf waveform.fsdb
+```
