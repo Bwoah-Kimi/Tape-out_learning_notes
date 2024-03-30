@@ -13,7 +13,6 @@ plugins:
       lang:
         - zh
         - en
-  - mkdocs-minify-plugin
   - mkdocs-material-extensions
   - mkdocs-material
 
