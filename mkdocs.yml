@@ -13,7 +13,6 @@ plugins:
       lang:
         - zh
         - en
-  - mkdocs-material-extensions
   - mkdocs-material
 
 nav:
