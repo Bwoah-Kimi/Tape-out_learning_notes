@@ -1,6 +1,7 @@
 # 面向流片的XiangShan配置与仿真
 
-[XiangShan](https://xiangshan-doc.readthedocs.io/zh-cn/latest/)是一个规模很大，版本迭代很快的开源项目。截止2024年3月已经迭代至第三个版本（昆明湖），香山团队已经完成了两次流片。
+[XiangShan](https://xiangshan-doc.readthedocs.io/zh-cn/latest/)是一个规模很大，版本迭代很快的开源项目。
+截止2024年3月已经迭代至第三个版本（昆明湖），香山团队已经完成了两次流片。
 
 为了在自己的流片工作中使用香山处理器，需要做不少的调整，在此做一些简要的介绍。
 

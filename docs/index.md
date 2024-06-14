@@ -2,7 +2,8 @@
 
 This is the documentation for the tape-out workflow intended for ISSCC'25.
 
-Please note that this workflow is tailored to my specific working environment. Due to licensing and copyright constrainsts, I am unable to share all related files here. However, I hope that the content provided here can still be beneficial to you.
+Please note that this workflow is tailored to my specific working environment.
+Due to licensing and copyright constrainsts, I am unable to share all related files here. However, I hope that the content provided here can still be beneficial to you.
 
 > Disclaimer: This project is currently under development. The accuracy of the documents cannot be fully guaranteed.
 

@@ -1,7 +1,5 @@
 # Genus Workflow
 
-**Under development!**
-
 * 此处介绍了Cadance Genus的数字综合流程，主要涉及到一些基本的脚本修改。
 
 ## SRAM/Register File替换
