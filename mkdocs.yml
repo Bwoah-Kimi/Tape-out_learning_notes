@@ -1,4 +1,6 @@
 site_name: Tape-out Learning Notes
+site_url: https://bwoah-kimi.github.io/Tape-out_learning_notes/
+site_author: Bwoah-Kimi
 
 theme:
   name: material
@@ -13,11 +15,10 @@ plugins:
       lang:
         - zh
         - en
-  - mkdocs-material
 
 nav:
-  - Home: docs/index.md
-  - Simulation: docs/1_code_modification_and_simulation_workflow.md
+  - Home: index.md
+  - Simulation: 1_code_modification_and_simulation_workflow.md
   - FPGA: 2_FPGA_verification_workflow.md
   - Genus Synthesis: 3_genus_synthesis_workflow.md
   - Innovus Implementation: 4_innovus_backend_workflow.md
