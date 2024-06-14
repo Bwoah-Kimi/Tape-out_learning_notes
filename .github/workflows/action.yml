@@ -1,0 +1,20 @@
+name: Publish MkDocs via GitHub Actions
+on:
+  push:
+    branches:
+      - master 
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install mkdocs
+      - run: pip install mkdocs-material 
+      - run: pip install mkdocs-material-extensions
+      - run: pip install mkdocs-minify-plugin
+      - run: pip freeze
+      - run: mkdocs gh-deploy --force
