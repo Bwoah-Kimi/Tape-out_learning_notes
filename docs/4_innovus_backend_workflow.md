@@ -57,7 +57,8 @@
 
 ### 关于`addRing`命令
 
-** 简单来说，在模块的四周，以及内部MACRO（例如SRAM/Register File）的四周需添加Power ring，用于給旁边的功能单元供电
+简单来说，在模块的四周，以及内部MACRO（例如SRAM/Register File）的四周需添加Power ring，用于给旁边的功能单元供电。
+
 * A power ring **provides a continuous path for power and ground connections** around the periphery of the core area of the entire chip.
 * This ring is essential for distributing power and ground connections uniformly across the chip to ensure that all parts of the IC receive a stable power supply and maintain a solid ground reference.
 * Purpose and functionality: stable power supply, noise reduction, thermal management
@@ -139,6 +140,7 @@
 	source ../scripts/place_macro.tcl
 	```
 5. 在SRAM/Register File和其他MACRO的周围添加Halo，并根据情况设置Routing Blockage
+
 	```tcl
 	# add Halos around MACROS
 	setInstancePlacementStatus -allHardMacros -status fixed
@@ -154,21 +156,25 @@
 		createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
 	}
 	```
+
 	* 可以通过添加`RO R90 R180 MX MX90 MY MY90`等决定SRAM的摆放方向
 		* 例如：`placeInstance $sram_macro 21.0 21.0 R180`
 	* 需要注意，22nm工艺不支持90度旋转
 
 6. 定义Power连接，见[pg_pin.tcl](./my_scripts/pg_pin.tcl)
+
 	```tcl
 	source ../scripts/power_pins.tcl
 	```
 
 7. 添加管脚，使用`editPin`命令,见[add_pin.tcl](./my_scripts/add_pin.tcl)
+
 	```tcl
 	source ../scripts/add_pin.tcl
 	```
 
 8. 添加EndCap, WellTap
+
 	```tcl
 	set itx $rm_tap_cell_distance
 	set tap_rule [expr $itx/4]
@@ -185,6 +191,7 @@
 	```
 
 6. 添加Power Rings, Power Stripes，见[power_ring.tcl](./my_scripts/power_ring.tcl)
+
 	```tcl
 	source ../scripts/power_ring.tcl
 
@@ -207,6 +214,7 @@
 7. Placement
 	* `-routeTopRoutingLayer 7`说明允许信号线最高使用M7层的金属。根据整体版图情况，可以选择M5-M7层作为布信号线所允许的最高层金属。通常来说，版图最高层金属只会有P/G电源线，在此例中，为M8层金属。
 	* `-routeBottomRoutingLayer 2`说明允许信号线最低使用M2层的金属。
+
 	```tcl
 	setTieHiLoMode  -cell $rm_tie_hi_lo_list \
 									-maxFanout 8
@@ -236,6 +244,7 @@
 	```
 
 8. Clock Tree Synthesis (CTS)
+
 	```tcl
 	set_ccopt_property -update_io_latency true
 	set_ccopt_property -force_update_io_latency true
@@ -264,6 +273,7 @@
 	```
 
 9. Route
+
 	```tcl
 	setExtractRCMode -engine postRoute -effortLevel medium -tQuantusForPostRoute true
 	
@@ -279,6 +289,7 @@
 	```
 
 10. Post-route
+
 	```tcl
 	setExtractRCMode -engine postRoute -effortLeve medium -tQuantusForPostRoute true
 	setOptMode -verbose true
@@ -303,6 +314,7 @@
 	```
 
 11. Add Filler Cells
+
 	```tcl
 	setFillerMode -scheme locationFirst \
 				  			-minHole true \
@@ -318,6 +330,7 @@
 
 12. Create P/G Pins
 	在此处定义的P/G管脚与此前定义的最顶层的Power Stripe重叠。在此例中，是M8层金属。
+
 	```tcl
 	# create PG Pins
 	for { set i 0} {$i <= 22 } {incr i} {
@@ -338,6 +351,7 @@
 	```
 
 13. Generate Files
+
 	```tcl
 	write_lef_abstract -5.8 -specifyTopLayer M8 \
                   	 -PGpinLayers {M8} -stripePin \
@@ -360,6 +374,7 @@
 	```
 
 14. Signoff
+
 	```tcl
 	# save the deisgn for signoff
 	saveDesign ${rm_core_top}.signoff.enc

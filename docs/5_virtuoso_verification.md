@@ -8,6 +8,7 @@
 
 * 在Innovus流程中，通过如下的命令导出GDS文件和门级网表。
     * 如果设计中使用了SRAM/Register File或子模块，需要在`-merge`选项中把Macro的`gds`或`gds2`文件路径添加进来。
+    
     ```tcl
     streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
             -merge "/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds \

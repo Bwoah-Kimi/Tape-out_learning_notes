@@ -16,6 +16,7 @@
 ![sram compiler](figs/sram_compiler.png)
 
 部分常见的设置选项如下：
+
 * `Number of Words`: SRAM的深度
 * `Number of Bits`: SRAM的宽度
 * `Multiplexer Width`, `Number of Banks`会影响最终SRAM的形状，也受到数据深度与宽度的影响。在某些深度与宽度的组合下，可能无法找到一个合法的MUX与Bank数组合，在这种情况下可以考虑将SRAM的宽度减半，分开生成。
@@ -23,9 +24,11 @@
 * `Bit Write Mask`允许你在写入数据时选择性地更新特定的位，而不用更新整个字（Word）。为此我们需要 生成单独的掩码（Mask）信号来控制在每次写入SRAM时想要对哪几位进行操作。
 
 在我们自己的模块中使用SRAM Compiler生成的单元，需要生成相应的文件。
+
 * 在`views`部分选择`LEF Footprint`, `LVS Netlist`, `Liberty Model`, `Verilog Model`
 
 ![sram compiler views](figs/views.png)
+
 * 在`Corners`菜单中勾选所有的domain与processes，以保证生成综合报告的完整性。
 
 ![sram compiler corners](figs/corners.png)
