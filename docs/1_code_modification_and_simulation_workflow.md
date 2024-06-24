@@ -19,9 +19,9 @@
 * 参考<https://xiangshan-doc.readthedocs.io/zh-cn/latest/tools/xsenv/>中的介绍进行操作。
 * 需要注意`XiangShan`和`NEMU`项目的版本。
 * 为了成功将Chisel编译成Verilog代码，需要在`build.sc`中修改内存限制，详见<https://github.com/OpenXiangShan/XiangShan/issues/891>
-    ```
-    override def forkArgs = Seq("-Xmx15G", "-Xss256m")
-    ```	
+```
+override def forkArgs = Seq("-Xmx15G", "-Xss256m")
+```	
 
 ## 修改Cache大小
 
@@ -119,30 +119,29 @@ rowBits: Int = 64,
 
 ### 接口介绍
 
-`XSTop.v`是经过编译之后的处理器Verilog代码，即可综合的裸核。处理器核对外暴露出了几套接口，在此记录。
+`XSTop.v`是经过编译之后的处理器Verilog代码，即可综合的裸核。处理器核对外暴露出了几套接口，在此记录。\
 * dma：一套AXI接口，没有使用
-    ```scala
-    l_soc.module.dma <> 0.U.asTypeOf(l_soc.module.dma)
-    ```
-* peripheral：一套AXI接口，CPU为Master，Peripheral为Slave
-    ```scala
-    val l_simMMIO = LazyModule(new SimMMIO(l_soc.misc.peripheralNode.in.head._2))
-    val simMMIO = Module(l_simMMIO.module)
-    l_simMMIO.io_axi4 <> soc.peripheral
-    ```
-    
-    SoC的Peripheral模块在SimTop中通过AXI4连接到SimMMIO中
+```scala
+l_soc.module.dma <> 0.U.asTypeOf(l_soc.module.dma)
+```
+
+* Peripheral：一套AXI接口，CPU为Master，Peripheral为Slave。SoC的Peripheral模块在SimTop中通过AXI4连接到SimMMIO中。**XSTop在reset结束之后会从0x1000_0000位置读取指令，最终跳转到主存上执行程序。**
     * auto_out_3: intrGen
     * auto_out_2: SD
     * auto_out_1: FLASH (boot address: 0x1000_0000)
     * auto_out_0: UART
 
-    **XSTop在reset结束之后会从0x1000_0000位置读取指令，最终跳转到主存上执行程序。**
+```scala
+val l_simMMIO = LazyModule(new SimMMIO(l_soc.misc.peripheralNode.in.head._2))
+val simMMIO = Module(l_simMMIO.module)
+l_simMMIO.io_axi4 <> soc.peripheral
+```
+
 * memory：一套AXI接口，CPU为Master，Memory为Slave。Memory模块在SoC模块中通过AXI4接口连接到核上
-    ```scala
-    val simAXIMem = Module(l_simAXIMem.module)
-    l_simAXIMem.io_axi4 <> soc.memory
-    ```
+```scala
+val simAXIMem = Module(l_simAXIMem.module)
+l_simAXIMem.io_axi4 <> soc.memory
+```
 
 `SimTop.v`是使用香山仿真环境所生成的SoC Verilog代码。为替换成自己的仿真验证环境，我们需要在此基础上进行修改。
 
@@ -154,6 +153,7 @@ rowBits: Int = 64,
     val uart = new UARTIO
   })
 ```
+
 ```verilog
 module SimTop(
   input         clock,

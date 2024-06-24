@@ -1,6 +1,6 @@
 # Genus Workflow
 
-* 此处介绍了Cadance Genus的数字综合流程，主要涉及到一些基本的脚本修改。
+此处介绍了Cadance Genus的数字综合流程，主要涉及到一些基本的脚本修改。
 
 ## SRAM/Register File替换
 
@@ -29,7 +29,7 @@
 
 ![sram compiler views](figs/views.png)
 
-* 在`Corners`菜单中勾选所有的domain与processes，以保证生成综合报告的完整性。
+* 在`Corners`菜单中勾选所有的DOMAINS与PROCESSES，以保证生成综合报告的完整性。
 
 ![sram compiler corners](figs/corners.png)
 
@@ -41,10 +41,10 @@
 ## RTL数字综合
 
 1. 修改工艺路径
-  	* `./scripts/design_input_macro.tcl` 中修改PDK和标准库的路径。在之后的综合/后端流程中也会涉及到使用的工艺库，需要根据情况进行调整。
-	```tcl
-	set std_lib MY_STD_LIB
-	```
+	* `./scripts/design_input_macro.tcl` 中修改PDK和标准库的路径。在之后的综合/后端流程中也会涉及到使用的工艺库，需要根据情况进行调整。
+```tcl
+set std_lib MY_STD_LIB
+```
 	* `std_lib`可选：
 		* `tcbn22ullbwp30p140lvt`
 		* `tcbn22ullbwp30p140hvt`
@@ -56,52 +56,53 @@
 2. 添加RTL
 	* 添加RTL代码至`./rtl/`
 	* 在`./rtl/srcs.tcl`中添加文件名
-	```tcl
-	read_hdl ../rtl/MY_MODULE_1.v
-	read_hdl ../rtl/MY_MODULE_2.v
-	```
+```tcl
+read_hdl ../rtl/MY_MODULE_1.v
+read_hdl ../rtl/MY_MODULE_2.v
+```
 
 3. 定义顶层模块
 	* 在`./scripts/core_config.tcl`中定义需要综合的**顶层模块名称**
-	```tcl
-	set rm_core_top MY_TOP_MODULE
-	```
+```tcl
+set rm_core_top MY_TOP_MODULE
+```
 
 4. 定义时钟周期
 	* 在`./scripts/design_input_macro.tcl`中
-	```tcl
-	set rm_clock_period MY_CLOCK_PERIOD
-	```
+```tcl
+set rm_clock_period MY_CLOCK_PERIOD
+```
 	* 单位为ns
 
 5. 添加**SRAM/Register File**所需的文件
 	* 将所需要的SRAM LIB文件生成并放置于`./sram/my_sram_lib_files/`文件夹中，
 	* 在`./scripts/design_input_macro.tcl`中添加综合所需要的SRAM
-	```tcl
-	set sram_insts [concat $MACROname_rams \
-		"my_sram_lib_files" \
-	]
-	```
+```tcl
+set sram_insts [concat $MACROname_rams \
+	"my_sram_lib_files" \
+]
+```
 
 6. 添加**额外的Macro**（例如CIM，子模块）所需的文件
 	* 添加`LIB`文件。
 		* `LIB`文件包括各个模块的时序信息，对于每一个Corner都会生成相应的`LIB`文件。 
 		* 对于Genus Synthesis，`LIB`文件是必须的。
-		```tcl
-		set ff_0p88v_m40c_libs [list ${base_lib_dir}/${base_ff_0p88v_m40c_lib}.lib ${io_lib}ffg08ppv2p75vm40c.lib \
-			/path/to/foundry/lib/files \
-			/work/home/my_project/tapeout/lib_files/CIM_ff_0p88v_m40c.lib \
-		]
-		```
+	```tcl
+	set ff_0p88v_m40c_libs [list ${base_lib_dir}/${base_ff_0p88v_m40c_lib}.lib ${io_lib}ffg08ppv2p75vm40c.lib \
+		/path/to/foundry/lib/files \
+		/work/home/my_project/tapeout/lib_files/CIM_ff_0p88v_m40c.lib \
+	]
+	```
 	* 添加`LEF`文件。
 		* `LEF`整体模块各层金属的尺寸，以及各个管脚的大小和位置。
 		* 对于后续Innovus Implementation，需要在`./scripts/design_inputs_macro.tcl`添加`LEF`文件。
 		* 对于Genus Synthesis，可以暂时不添加`LEF`文件，但是这样的话Genus综合报告中不会报该Macro的面积。为了能够在后端之前大概估计设计的面积，建议在综合前添加`LEF`。
-		```tcl
-		set rm_lef_reflib [concat ${rm_lef_tech_file} ${rm_foundry_liv_dirs}/Back_End/lef/${std_lib}_110a/lef/${std_lib}.lef \
-			/path/to/foundry/lef/files \
-			/work/home/my_project/tapeout/lef_files/CIM.lef \
-		]
+	```tcl
+	set rm_lef_reflib [concat ${rm_lef_tech_file} ${rm_foundry_liv_dirs}/Back_End/lef/${std_lib}_110a/lef/${std_lib}.lef \
+		/path/to/foundry/lef/files \
+		/work/home/my_project/tapeout/lef_files/CIM.lef \
+	]
+	```
 
 7. 启动综合
 	* `b make genus_syn`

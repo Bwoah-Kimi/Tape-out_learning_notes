@@ -91,302 +91,297 @@
 * 连接Power
 	* 在`./scripts/init_invs.tcl`中修改模块的P/G Connection。
 	* 如果需要区分电源域，例如SRAM需要单独供电，则需要在此定义`VDD`, `VDD_SRAM`两个Power Net
-	```tcl
-	set init_pwr_net {VDD VDD_SRAM}
-	```
+```tcl
+set init_pwr_net {VDD VDD_SRAM}
+```
 
 ### 流程说明
 
 此处以`Jan15_HuanCun`模块的后端流程为例
 
 1. 启动Innovus
-	```bash
-	cd /work/home/ztzhu/my_projects/xiangshan/Jan15/backend_huancun/
-	gvim huancun_innovus_script.tcl & cd work
-	b innovus
-	```
+```bash
+cd /work/home/ztzhu/my_projects/xiangshan/Jan15/backend_huancun/
+gvim huancun_innovus_script.tcl & cd work
+b innovus
+```
 
 2. 载入设计
 	在Innovus的命令行中输入如下命令，下同
-	```tcl
-	date
-	setMultiCpuUsage -localCpu 32
-	set start_time [clock seconds]
-	source -verbose ../scripts/core_config.tcl
-	source -verbose ../scripts/tech.tcl
-	source -verbose ../scripts/init_invs.tcl
-	source -verbose ../scripts/invs_settings.tcl
-	```
+```tcl
+date
+setMultiCpuUsage -localCpu 32
+set start_time [clock seconds]
+source -verbose ../scripts/core_config.tcl
+source -verbose ../scripts/tech.tcl
+source -verbose ../scripts/init_invs.tcl
+source -verbose ../scripts/invs_settings.tcl
+```
 
 3. 设置FloorPlan
 	*	根据Genus综合的面积报告以及整体版图规划选择版图的长和宽
 	*	Innovus右上角的Floorplan View可以看到SRAM/Register File等MACRO的大小
 	![Floorplan View](./figs/floorplan.png)
-	```tcl
-	set cell_height 0.7
-	set macro_halo_spc [expr 1 * $cell_height]
-	set macro_halo_spc_4 [expr 4 * $cell_height]
-	set macro_halo_spc_2 [expr 2 * $cell_height]
-	# set macro_halo_spc [expr 4 * $cell_height]
-	set die_sizex 900
-	set die_sizey 850
-	floorPlan -d $die_sizex $die_sizey 3.5 3.5 3.5 3.5
-	uiSetTool select
-	getIoFlowFlag
-	```
+```tcl
+set cell_height 0.7
+set macro_halo_spc [expr 1 * $cell_height]
+set macro_halo_spc_4 [expr 4 * $cell_height]
+set macro_halo_spc_2 [expr 2 * $cell_height]
+# set macro_halo_spc [expr 4 * $cell_height]
+set die_sizex 900
+set die_sizey 850
+floorPlan -d $die_sizex $die_sizey 3.5 3.5 3.5 3.5
+uiSetTool select
+getIoFlowFlag
+```
 
 4. 放置SRAM，见[place_macro.tcl](./my_scripts/place_macro.tcl)
-	```tcl
-	source ../scripts/place_macro.tcl
-	```
+```tcl
+source ../scripts/place_macro.tcl
+```
 5. 在SRAM/Register File和其他MACRO的周围添加Halo，并根据情况设置Routing Blockage
+```tcl
+# add Halos around MACROS
+setInstancePlacementStatus -allHardMacros -status fixed
+addHaloToBlock [list $macro_halo_spc_4 $macro_halo_spc_4 $macro_halo_spc_4 $macro_halo_spc_4] -allMacro
 
-	```tcl
-	# add Halos around MACROS
-	setInstancePlacementStatus -allHardMacros -status fixed
-	addHaloToBlock [list $macro_halo_spc_4 $macro_halo_spc_4 $macro_halo_spc_4 $macro_halo_spc_4] -allMacro
-
-	# add Routing Blockage if necessary
-	for {set i 0 } {$i <= 7 } {incr $i} {
-		set macroName "sram_$i"
-		createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
-	}
-	for {set i 0 } {$i <= 6 } {incr $i} {
-		set macroName "rf_$i"
-		createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
-	}
-	```
+# add Routing Blockage if necessary
+for {set i 0 } {$i <= 7 } {incr $i} {
+	set macroName "sram_$i"
+	createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
+}
+for {set i 0 } {$i <= 6 } {incr $i} {
+	set macroName "rf_$i"
+	createRouteBlk -cover -inst [set $macroName] -layer {M1 M2 M3 M4 M5 M6 M7} -spacing $macro_halo_spc
+}
+```
 
 	* 可以通过添加`RO R90 R180 MX MX90 MY MY90`等决定SRAM的摆放方向
 		* 例如：`placeInstance $sram_macro 21.0 21.0 R180`
 	* 需要注意，22nm工艺不支持90度旋转
 
 6. 定义Power连接，见[pg_pin.tcl](./my_scripts/pg_pin.tcl)
-
-	```tcl
-	source ../scripts/power_pins.tcl
-	```
+```tcl
+source ../scripts/power_pins.tcl
+```
 
 7. 添加管脚，使用`editPin`命令,见[add_pin.tcl](./my_scripts/add_pin.tcl)
-
-	```tcl
-	source ../scripts/add_pin.tcl
-	```
+```tcl
+source ../scripts/add_pin.tcl
+```
 
 8. 添加EndCap, WellTap
+```tcl
+set itx $rm_tap_cell_distance
+set tap_rule [expr $itx/4]
 
-	```tcl
-	set itx $rm_tap_cell_distance
-	set tap_rule [expr $itx/4]
-	
-	setPlaceMode -place_detail_legalization_inst_gap 2
-	setPlaceMode -place_detail_use_no_diffusion_one_site_filler false
-	
-	setEndCapMode -reset
-	setEndCapMode -rightEdge $endcap_left -leftEdge $endcap_right
-	addEndCap
+setPlaceMode -place_detail_legalization_inst_gap 2
+setPlaceMode -place_detail_use_no_diffusion_one_site_filler false
 
-	addWellTap -cell ${rm_tap_cell} -cellInterval $rm_tap_cell_distance -checkerboard
-	allWellTap -prefix DECAP -cellInterval $rm_tap_cell_distance -cell ${dcap_cell} -skipRow 1
-	```
+setEndCapMode -reset
+setEndCapMode -rightEdge $endcap_left -leftEdge $endcap_right
+addEndCap
+
+addWellTap -cell ${rm_tap_cell} -cellInterval $rm_tap_cell_distance -checkerboard
+allWellTap -prefix DECAP -cellInterval $rm_tap_cell_distance -cell ${dcap_cell} -skipRow 1
+```
 
 6. 添加Power Rings, Power Stripes，见[power_ring.tcl](./my_scripts/power_ring.tcl)
+```tcl
+source ../scripts/power_ring.tcl
 
-	```tcl
-	source ../scripts/power_ring.tcl
+# add power stripes at four sides of SRAM
+# M6 (Vertical)
+addStripe -start_offset 0.7 -direction vertical -block_ring_top_layer_limit M6 -padcore_ring_bottom_layer M1 -set_to_set_distance 30 -stacked_via_top_layer M6 -padcore_ring_top_layer_limit M6 -spacing 15 -layer M6 -block_ring_bottom_layer_limit M1 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M1
 
-	# add power stripes at four sides of SRAM
-	# M6 (Vertical)
-	addStripe -start_offset 0.7 -direction vertical -block_ring_top_layer_limit M6 -padcore_ring_bottom_layer M1 -set_to_set_distance 30 -stacked_via_top_layer M6 -padcore_ring_top_layer_limit M6 -spacing 15 -layer M6 -block_ring_bottom_layer_limit M1 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M1
-	
-	# M7 (Horizontal)
-	addStripe -start_offset 0.7 -direction horizontal -block_ring_top_layer_limit M7 -padcore_ring_bottom_layer M6 -set_to_set_distance 20 -stacked_via_top_layer M7 -padcore_ring_top_layer_limit M7 -spacing 10 -layer M7 -block_ring_bottom_layer_limit M6 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M6
-	
-	# M8 (Vertical)
-	addStripe -start_offset 10 -direction vertical -block_ring_top_layer_limit M8 -padcore_ring_bottom_layer M6 -set_to_set_distance 20 -stacked_via_top_layer M8 -padcore_ring_top_layer_limit M8 -spacing 10 -layer M8 -block_ring_bottom_layer_limit M6 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M6
-	
-	sroute -connect { corePin } -layerChangeRange { M1 M6 } -blockPinTarget { nearestRingStripe nearestTarget } -padPinPortConnect { allPort oneGeom } -checkAlignedSecondaryPin 1 -blockPin useLef  -allowJogging 0 -crossoverViaBottomLayer M1 -allowLayerChange 1 -targetViaTopLayer M6 -crossoverViaTopLayer M6 -targetViaBottomLayer M1 -nets {VDD VSS VDD_SRAM}
-	
-	editPowerVia -skip_via_on_pin Standardcell -bottom_layer M1 -add_vias 1 -top_layer M6
-	```
+# M7 (Horizontal)
+addStripe -start_offset 0.7 -direction horizontal -block_ring_top_layer_limit M7 -padcore_ring_bottom_layer M6 -set_to_set_distance 20 -stacked_via_top_layer M7 -padcore_ring_top_layer_limit M7 -spacing 10 -layer M7 -block_ring_bottom_layer_limit M6 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M6
+
+# M8 (Vertical)
+addStripe -start_offset 10 -direction vertical -block_ring_top_layer_limit M8 -padcore_ring_bottom_layer M6 -set_to_set_distance 20 -stacked_via_top_layer M8 -padcore_ring_top_layer_limit M8 -spacing 10 -layer M8 -block_ring_bottom_layer_limit M6 -width 2 -nets {VSS, VDD_SRAM} -stacked_via_bottom_layar M6
+
+sroute -connect { corePin } -layerChangeRange { M1 M6 } -blockPinTarget { nearestRingStripe nearestTarget } -padPinPortConnect { allPort oneGeom } -checkAlignedSecondaryPin 1 -blockPin useLef  -allowJogging 0 -crossoverViaBottomLayer M1 -allowLayerChange 1 -targetViaTopLayer M6 -crossoverViaTopLayer M6 -targetViaBottomLayer M1 -nets {VDD VSS VDD_SRAM}
+
+editPowerVia -skip_via_on_pin Standardcell -bottom_layer M1 -add_vias 1 -top_layer M6
+```
 	* 应当可以看到走在SRAM/Register File MACRO上的Power。以下图为例，可以看到M6层的Power Stripe到M4层SRAM VDD的VIA，说明给该MACRO提供了供电。
 
 7. Placement
 	* `-routeTopRoutingLayer 7`说明允许信号线最高使用M7层的金属。根据整体版图情况，可以选择M5-M7层作为布信号线所允许的最高层金属。通常来说，版图最高层金属只会有P/G电源线，在此例中，为M8层金属。
 	* `-routeBottomRoutingLayer 2`说明允许信号线最低使用M2层的金属。
 
-	```tcl
-	setTieHiLoMode  -cell $rm_tie_hi_lo_list \
-									-maxFanout 8
-	deleteTieHiLo
-	
-	setPlaceMode -reset
-	setPlaceMode -place_detail_legalization_inst_gap 2
-	setPlaceMode -place_detail_use_no_diffusion_one_site_filler false
-	
-	# to address the issue regarding scan chains
-	# setPlaceMode -place_global_ignore_scan false
-	
-	setNanoRouteMode -routeTopRoutingLayer 7
-	setNanoRouteMode -routeBottomRoutingLayer 2
-	setPlaceMode -fp false
-	setAnalysisMode -aocv false
-	
-	placeDesign
-	addTieHiLo
+```tcl
+setTieHiLoMode  -cell $rm_tie_hi_lo_list \
+								-maxFanout 8
+deleteTieHiLo
 
-	place_opt_design -incremental  -out_dir ../reports/layout/INNOVUS_RPT -prefix place
-	timeDesign -preCTS -outDir ../reports/layout/INNOVUS_RPT
+setPlaceMode -reset
+setPlaceMode -place_detail_legalization_inst_gap 2
+setPlaceMode -place_detail_use_no_diffusion_one_site_filler false
 
-	# preCTS reports
-	set myOption "preCTS"
-	source ../scripts/intermediate_reporting.tcl
-	```
+# to address the issue regarding scan chains
+# setPlaceMode -place_global_ignore_scan false
+
+setNanoRouteMode -routeTopRoutingLayer 7
+setNanoRouteMode -routeBottomRoutingLayer 2
+setPlaceMode -fp false
+setAnalysisMode -aocv false
+
+placeDesign
+addTieHiLo
+
+place_opt_design -incremental  -out_dir ../reports/layout/INNOVUS_RPT -prefix place
+timeDesign -preCTS -outDir ../reports/layout/INNOVUS_RPT
+
+# preCTS reports
+set myOption "preCTS"
+source ../scripts/intermediate_reporting.tcl
+```
 
 8. Clock Tree Synthesis (CTS)
 
-	```tcl
-	set_ccopt_property -update_io_latency true
-	set_ccopt_property -force_update_io_latency true
-	set_ccopt_property -enable_all_views_for_io_latency_update true
-	set_ccopt_property -max_fanout ${rm_cts_max_fanout}
-	set_ccopt_property -effort high
-	set_ccopt_property buffer_cells $rm_clock_buf_cap_cell
-	set_ccopt_property inverter_cells $rm_clock_inv_cap_cell
-	set_ccopt_property clock_gating_cells $rm_clock_icg_cell
+```tcl
+set_ccopt_property -update_io_latency true
+set_ccopt_property -force_update_io_latency true
+set_ccopt_property -enable_all_views_for_io_latency_update true
+set_ccopt_property -max_fanout ${rm_cts_max_fanout}
+set_ccopt_property -effort high
+set_ccopt_property buffer_cells $rm_clock_buf_cap_cell
+set_ccopt_property inverter_cells $rm_clock_inv_cap_cell
+set_ccopt_property clock_gating_cells $rm_clock_icg_cell
 
-	set_ccopt_mode -cts_use_min_max_path_delay false \
-								 -cts_target_slew $rm_max_clock_transition \
-								 -cts_target_skew 0.15 \
-								 -modify_clock_latency false
+set_ccopt_mode -cts_use_min_max_path_delay false \
+								-cts_target_slew $rm_max_clock_transition \
+								-cts_target_skew 0.15 \
+								-modify_clock_latency false
 
-	# set_ccopt_property balance_mode cluster
-	create_ccopt_clock_tree_spec -file ../data/${rm_core_top}-ccopt_cts.spec
-	create_ccopt_clock_tree_spec
+# set_ccopt_property balance_mode cluster
+create_ccopt_clock_tree_spec -file ../data/${rm_core_top}-ccopt_cts.spec
+create_ccopt_clock_tree_spec
 
-	ccopt_design -check_prerequisites
-	ccopt_design -outDir ../reports/layout/INNOVUS_RPT -prefix ccopt
+ccopt_design -check_prerequisites
+ccopt_design -outDir ../reports/layout/INNOVUS_RPT -prefix ccopt
 
-	# Report design after CTS
-	set myOption "clocks"
-	source ../scripts/intermediate_reporting.tcl
-	```
+# Report design after CTS
+set myOption "clocks"
+source ../scripts/intermediate_reporting.tcl
+```
 
 9. Route
 
-	```tcl
-	setExtractRCMode -engine postRoute -effortLevel medium -tQuantusForPostRoute true
-	
-	set NanoRouteMode -routeWithTimingDriven true \
-					  				-routeWithSiDriven true \
-					  				-routeWithLithoDriven false \
-			  		  			-routeDesignRouteClockNetsFirst true \
-					  				-routeReserveSpaceForMultiCut false \
-					  				-drouteUseMultiCutViaEffort low \
-			  		  			-drouteFixAntenna true
-	
-	routeDesign
-	```
+```tcl
+setExtractRCMode -engine postRoute -effortLevel medium -tQuantusForPostRoute true
+
+set NanoRouteMode -routeWithTimingDriven true \
+								-routeWithSiDriven true \
+								-routeWithLithoDriven false \
+							-routeDesignRouteClockNetsFirst true \
+								-routeReserveSpaceForMultiCut false \
+								-drouteUseMultiCutViaEffort low \
+							-drouteFixAntenna true
+
+routeDesign
+```
 
 10. Post-route
 
-	```tcl
-	setExtractRCMode -engine postRoute -effortLeve medium -tQuantusForPostRoute true
-	setOptMode -verbose true
-	setOptMode -highEffortOptCells $hold_fixing_cells
-	setOptMode -holdFixingCells $hold_fixing_cells
-	optDesign -postRoute -drv
-	optDesign -postRoute -incr
-	optDesign -postRoute -hold
+```tcl
+setExtractRCMode -engine postRoute -effortLeve medium -tQuantusForPostRoute true
+setOptMode -verbose true
+setOptMode -highEffortOptCells $hold_fixing_cells
+setOptMode -holdFixingCells $hold_fixing_cells
+optDesign -postRoute -drv
+optDesign -postRoute -incr
+optDesign -postRoute -hold
 
-	timeDesign -postRoute -outDir ../reports/layout/INNOVUS_RPT
-	timeDesign -postRoute -hold -outDir ../reports/layout/INNOVUS_RPT
+timeDesign -postRoute -outDir ../reports/layout/INNOVUS_RPT
+timeDesign -postRoute -hold -outDir ../reports/layout/INNOVUS_RPT
 
-	# Report design after routing
-	set myOption "postRoute"
-	source ../scripts/intermediate_reporting.tcl
+# Report design after routing
+set myOption "postRoute"
+source ../scripts/intermediate_reporting.tcl
 
-	# Incrementtal routing to fix shorts
-	addTieHiLo
+# Incrementtal routing to fix shorts
+addTieHiLo
 
-	setNanoRouteMode -routeWithEco true -drouteFixAntenna true -routeInsertAntennaDiode true
-	globalDetailRoute
-	```
+setNanoRouteMode -routeWithEco true -drouteFixAntenna true -routeInsertAntennaDiode true
+globalDetailRoute
+```
 
 11. Add Filler Cells
 
-	```tcl
-	setFillerMode -scheme locationFirst \
-				  			-minHole true \
-				  			-fitGap true \
-				  			-diffCellViol true
+```tcl
+setFillerMode -scheme locationFirst \
+						-minHole true \
+						-fitGap true \
+						-diffCellViol true
 
-	addFiller -cell $rm_fill_cells
-	ecoRoute -fix_drc
+addFiller -cell $rm_fill_cells
+ecoRoute -fix_drc
 
-	setFillerMode -ecoMode true
-	addFiller -fixDRC -fitGap -cell $rm_fill_cells
-	```
+setFillerMode -ecoMode true
+addFiller -fixDRC -fitGap -cell $rm_fill_cells
+```
 
 12. Create P/G Pins
 	在此处定义的P/G管脚与此前定义的最顶层的Power Stripe重叠。在此例中，是M8层金属。
 
-	```tcl
-	# create PG Pins
-	for { set i 0} {$i <= 22 } {incr i} {
-		set initX [expr 10 + $i * 40]
-		set initY 3.5
-		set stripeHeight 843
-		set stripeWidth 2	
-		createPGPin VDD -geom M8 $initX $initY [expr $initX + $stripeWidth] [expr $initY + $stripeHeight]
-	}
-
-	for { set i 0 } {$i <= 22 } {incr i} {
-	set initX [expr 20 + $i * 40]
+```tcl
+# create PG Pins
+for { set i 0} {$i <= 22 } {incr i} {
+	set initX [expr 10 + $i * 40]
 	set initY 3.5
 	set stripeHeight 843
-	set stripeWidth 2  
+	set stripeWidth 2	
 	createPGPin VDD -geom M8 $initX $initY [expr $initX + $stripeWidth] [expr $initY + $stripeHeight]
-	}
-	```
+}
+
+for { set i 0 } {$i <= 22 } {incr i} {
+set initX [expr 20 + $i * 40]
+set initY 3.5
+set stripeHeight 843
+set stripeWidth 2  
+createPGPin VDD -geom M8 $initX $initY [expr $initX + $stripeWidth] [expr $initY + $stripeHeight]
+}
+```
 
 13. Generate Files
 
-	```tcl
-	write_lef_abstract -5.8 -specifyTopLayer M8 \
-                  	 -PGpinLayers {M8} -stripePin \
-                   	 -cutObsMinSpacing \
-                   ../models/lef/${rm_core_top}.lef
+```tcl
+write_lef_abstract -5.8 -specifyTopLayer M8 \
+					-PGpinLayers {M8} -stripePin \
+					-cutObsMinSpacing \
+				../models/lef/${rm_core_top}.lef
 
-	write_sdf -min_view ff_0p88v_125c_view \
-			-typ_view tt_0p80v_25c_view \
-			-max_view ss_0p72v_m40c_view \
-			-recompute_parallel_arcs ../models/sdf/${rm_core_top}.sdf
+write_sdf -min_view ff_0p88v_125c_view \
+		-typ_view tt_0p80v_25c_view \
+		-max_view ss_0p72v_m40c_view \
+		-recompute_parallel_arcs ../models/sdf/${rm_core_top}.sdf
 
-	write_sdc ../models/sdc/${rm_core_top}.sdc
+write_sdc ../models/sdc/${rm_core_top}.sdc
 
-	streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
-			-merge "/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds"
-			/path/to/my/sram/gds \
-            /path/to/my/macro/gds" 
+streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
+		-merge "/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds"
+		/path/to/my/sram/gds \
+		/path/to/my/macro/gds" 
 
-	saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells
-	```
+saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells
+```
 
 14. Signoff
 
-	```tcl
-	# save the deisgn for signoff
-	saveDesign ${rm_core_top}.signoff.enc
+```tcl
+# save the design for signoff
+saveDesign ${rm_core_top}.signoff.enc
 
-	set stop_time [clock seconds]
-	set elapsedTime [clock format [expr $stop_time - $start_time] -format %H:%M:%S -gmt true]
-	puts "=============================================="
-	puts "        Elapsed runtime : $elapsedTime"
-	puts "=============================================="
+set stop_time [clock seconds]
+set elapsedTime [clock format [expr $stop_time - $start_time] -format %H:%M:%S -gmt true]
+puts "=============================================="
+puts "        Elapsed runtime : $elapsedTime"
+puts "=============================================="
 
-	date
-	```
+date
+```
 
 ## 一些常见报错说明
 

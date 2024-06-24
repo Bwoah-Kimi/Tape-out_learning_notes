@@ -7,17 +7,16 @@
 ## 将设计导入Virtuoso
 
 * 在Innovus流程中，通过如下的命令导出GDS文件和门级网表。
-    * 如果设计中使用了SRAM/Register File或子模块，需要在`-merge`选项中把Macro的`gds`或`gds2`文件路径添加进来。
-    
-    ```tcl
-    streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
-            -merge "/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds \
-            /path/to/my/sram/gds \
-            /path/to/my/register_file/gds \
-            /path/to/my/macro/gds" 
+    * 如果设计中使用了SRAM/Register File或子模块，需要在`-merge`选项中把Macro的`gds`或`gds2`文件路径添加进来。 
+```tcl
+streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
+        -merge "/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds \
+        /path/to/my/sram/gds \
+        /path/to/my/register_file/gds \
+        /path/to/my/macro/gds" 
 
-    saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells
-    ```
+saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells
+```
 
 * 新建一个存放Virtuoso工程文件的文件夹，在其中`b virtuoso`打开Virtuoso
 * 打开Library Manager，确保设计所需要的工艺库(例如`tsmcN22`)在Virtuoso搜索路径中
@@ -35,10 +34,10 @@
 * LVS检查的是目前的版图与门级网表所代表的逻辑是否一致。如果是一致的，那么说明物理版图与电路原理图一致，也就是Innovus的后端流程无误。
 * 将门级网表`.v`转换成`.cdl`格式
     * 需要在`./cadence/v2lvs.run`文件中添加相应工艺库的SPICE文件，随后运行如下指令
-    ```bash
-    cd ./cadence
-    b ./v2lvs.run
-    ```
+```bash
+cd ./cadence
+b ./v2lvs.run
+```
 
 * 导入LVS Runset文件
     * 在Virtuoso窗口上方选择`Calibre`->`nmLVS`
