@@ -99,14 +99,14 @@ set init_pwr_net {VDD VDD_SRAM}
 
 此处以`Jan15_HuanCun`模块的后端流程为例
 
-1. 启动Innovus
+* **Start Innovus**
 ```bash
 cd /work/home/ztzhu/my_projects/xiangshan/Jan15/backend_huancun/
 gvim huancun_innovus_script.tcl & cd work
 b innovus
 ```
 
-2. 载入设计
+* **Load design**
 	在Innovus的命令行中输入如下命令，下同
 ```tcl
 date
@@ -118,7 +118,7 @@ source -verbose ../scripts/init_invs.tcl
 source -verbose ../scripts/invs_settings.tcl
 ```
 
-3. 设置FloorPlan
+* **Set FloorPlan**
 	*	根据Genus综合的面积报告以及整体版图规划选择版图的长和宽
 	*	Innovus右上角的Floorplan View可以看到SRAM/Register File等MACRO的大小
 	![Floorplan View](./figs/floorplan.png)
@@ -135,11 +135,15 @@ uiSetTool select
 getIoFlowFlag
 ```
 
-4. 放置SRAM，见[place_macro.tcl](./my_scripts/place_macro.tcl)
+* **Place SRAM and other macros**
+	* 见[place_macro.tcl](./my_scripts/place_macro.tcl)
 ```tcl
 source ../scripts/place_macro.tcl
 ```
-5. 在SRAM/Register File和其他MACRO的周围添加Halo，并根据情况设置Routing Blockage
+* **Add halos and routing blockage around macros**
+	* 可以通过添加`RO R90 R180 MX MX90 MY MY90`等决定SRAM的摆放方向
+	* 例如：`placeInstance $sram_macro 21.0 21.0 R180`
+	* 需要注意，22nm工艺不支持90度旋转
 ```tcl
 # add Halos around MACROS
 setInstancePlacementStatus -allHardMacros -status fixed
@@ -156,21 +160,19 @@ for {set i 0 } {$i <= 6 } {incr $i} {
 }
 ```
 
-	* 可以通过添加`RO R90 R180 MX MX90 MY MY90`等决定SRAM的摆放方向
-		* 例如：`placeInstance $sram_macro 21.0 21.0 R180`
-	* 需要注意，22nm工艺不支持90度旋转
-
-6. 定义Power连接，见[pg_pin.tcl](./my_scripts/pg_pin.tcl)
+* **Define P/G Connections**
+	* 见[pg_pin.tcl](./my_scripts/pg_pin.tcl)
 ```tcl
 source ../scripts/power_pins.tcl
 ```
 
-7. 添加管脚，使用`editPin`命令,见[add_pin.tcl](./my_scripts/add_pin.tcl)
+* **Add Pins**
+	* 使用`editPin`命令，见[add_pin.tcl](./my_scripts/add_pin.tcl)
 ```tcl
 source ../scripts/add_pin.tcl
 ```
 
-8. 添加EndCap, WellTap
+* **Add EndCaps, WellTaps**
 ```tcl
 set itx $rm_tap_cell_distance
 set tap_rule [expr $itx/4]
@@ -186,7 +188,9 @@ addWellTap -cell ${rm_tap_cell} -cellInterval $rm_tap_cell_distance -checkerboar
 allWellTap -prefix DECAP -cellInterval $rm_tap_cell_distance -cell ${dcap_cell} -skipRow 1
 ```
 
-6. 添加Power Rings, Power Stripes，见[power_ring.tcl](./my_scripts/power_ring.tcl)
+* **Add Power Rings, Power Stripes**
+	* 见[power_ring.tcl](./my_scripts/power_ring.tcl)
+	* 应当可以看到走在SRAM/Register File MACRO上的Power。以下图为例，可以看到M6层的Power Stripe到M4层SRAM VDD的VIA，说明给该MACRO提供了供电。
 ```tcl
 source ../scripts/power_ring.tcl
 
@@ -204,12 +208,10 @@ sroute -connect { corePin } -layerChangeRange { M1 M6 } -blockPinTarget { neares
 
 editPowerVia -skip_via_on_pin Standardcell -bottom_layer M1 -add_vias 1 -top_layer M6
 ```
-	* 应当可以看到走在SRAM/Register File MACRO上的Power。以下图为例，可以看到M6层的Power Stripe到M4层SRAM VDD的VIA，说明给该MACRO提供了供电。
 
-7. Placement
+* **Placement**
 	* `-routeTopRoutingLayer 7`说明允许信号线最高使用M7层的金属。根据整体版图情况，可以选择M5-M7层作为布信号线所允许的最高层金属。通常来说，版图最高层金属只会有P/G电源线，在此例中，为M8层金属。
 	* `-routeBottomRoutingLayer 2`说明允许信号线最低使用M2层的金属。
-
 ```tcl
 setTieHiLoMode  -cell $rm_tie_hi_lo_list \
 								-maxFanout 8
@@ -238,7 +240,7 @@ set myOption "preCTS"
 source ../scripts/intermediate_reporting.tcl
 ```
 
-8. Clock Tree Synthesis (CTS)
+* **Clock Tree Synthesis (CTS)**
 
 ```tcl
 set_ccopt_property -update_io_latency true
@@ -267,8 +269,7 @@ set myOption "clocks"
 source ../scripts/intermediate_reporting.tcl
 ```
 
-9. Route
-
+* **Route**
 ```tcl
 setExtractRCMode -engine postRoute -effortLevel medium -tQuantusForPostRoute true
 
@@ -283,8 +284,7 @@ set NanoRouteMode -routeWithTimingDriven true \
 routeDesign
 ```
 
-10. Post-route
-
+* **Post-route**
 ```tcl
 setExtractRCMode -engine postRoute -effortLeve medium -tQuantusForPostRoute true
 setOptMode -verbose true
@@ -308,8 +308,7 @@ setNanoRouteMode -routeWithEco true -drouteFixAntenna true -routeInsertAntennaDi
 globalDetailRoute
 ```
 
-11. Add Filler Cells
-
+* **Add Filler Cells**
 ```tcl
 setFillerMode -scheme locationFirst \
 						-minHole true \
@@ -323,9 +322,8 @@ setFillerMode -ecoMode true
 addFiller -fixDRC -fitGap -cell $rm_fill_cells
 ```
 
-12. Create P/G Pins
-	在此处定义的P/G管脚与此前定义的最顶层的Power Stripe重叠。在此例中，是M8层金属。
-
+* **Create P/G Pins**
+	* 在此处定义的P/G管脚与此前定义的最顶层的Power Stripe重叠。在此例中，是M8层金属。
 ```tcl
 # create PG Pins
 for { set i 0} {$i <= 22 } {incr i} {
@@ -345,8 +343,7 @@ createPGPin VDD -geom M8 $initX $initY [expr $initX + $stripeWidth] [expr $initY
 }
 ```
 
-13. Generate Files
-
+* Generate Files
 ```tcl
 write_lef_abstract -5.8 -specifyTopLayer M8 \
 					-PGpinLayers {M8} -stripePin \
@@ -368,8 +365,7 @@ streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
 saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells
 ```
 
-14. Signoff
-
+* Signoff
 ```tcl
 # save the design for signoff
 saveDesign ${rm_core_top}.signoff.enc
