@@ -40,23 +40,23 @@
 
 ## RTL数字综合
 
-1. 修改工艺路径
+### 修改工艺路径
 
-	* `./scripts/design_input_macro.tcl` 中修改PDK和标准库的路径。在之后的综合/后端流程中也会涉及到使用的工艺库，需要根据情况进行调整。
+* `./scripts/design_input_macro.tcl` 中修改PDK和标准库的路径。在之后的综合/后端流程中也会涉及到使用的工艺库，需要根据情况进行调整。
 
 ```tcl
 set std_lib MY_STD_LIB
 ```
 
-	* `std_lib`可选：
-		* `tcbn22ullbwp30p140lvt`
-		* `tcbn22ullbwp30p140hvt`
-		* `tcbn22ullbwp7t30p140lvt`
-		* `tcbn22ullbwp7t30p140hvt`
-		* `tcbn22ullbwp7t40p140ehvt`
-		* `tcbn22ullbwp7t40p140hvt`
+* `std_lib`可选：
+	* `tcbn22ullbwp30p140lvt`
+	* `tcbn22ullbwp30p140hvt`
+	* `tcbn22ullbwp7t30p140lvt`
+	* `tcbn22ullbwp7t30p140hvt`
+	* `tcbn22ullbwp7t40p140ehvt`
+	* `tcbn22ullbwp7t40p140hvt`
 
-2. 添加RTL
+### 添加RTL
 
 	* 添加RTL代码至`./rtl/`
 	* 在`./rtl/srcs.tcl`中添加文件名
@@ -66,28 +66,28 @@ read_hdl ../rtl/MY_MODULE_1.v
 read_hdl ../rtl/MY_MODULE_2.v
 ```
 
-3. 定义顶层模块
+### 定义顶层模块
 
-	* 在`./scripts/core_config.tcl`中定义需要综合的**顶层模块名称**
+* 在`./scripts/core_config.tcl`中定义需要综合的**顶层模块名称**
 
 ```tcl
 set rm_core_top MY_TOP_MODULE
 ```
 
-4. 定义时钟周期
+### 定义时钟周期
 
-	* 在`./scripts/design_input_macro.tcl`中
+* 在`./scripts/design_input_macro.tcl`中
 
 ```tcl
 set rm_clock_period MY_CLOCK_PERIOD
 ```
 
-	* 单位为ns
+* 单位为ns
 
-5. 添加**SRAM/Register File**所需的文件
+### 添加**SRAM/Register File**所需的文件
 
-	* 将所需要的SRAM LIB文件生成并放置于`./sram/my_sram_lib_files/`文件夹中，
-	* 在`./scripts/design_input_macro.tcl`中添加综合所需要的SRAM
+* 将所需要的SRAM LIB文件生成并放置于`./sram/my_sram_lib_files/`文件夹中，
+* 在`./scripts/design_input_macro.tcl`中添加综合所需要的SRAM
 
 ```tcl
 set sram_insts [concat $MACROname_rams \
@@ -95,11 +95,11 @@ set sram_insts [concat $MACROname_rams \
 ]
 ```
 
-6. 添加**额外的Macro**（例如CIM，子模块）所需的文件
+### 添加**额外的Macro**（例如CIM，子模块）所需的文件
 
-	* 添加`LIB`文件。
-		* `LIB`文件包括各个模块的时序信息，对于每一个Corner都会生成相应的`LIB`文件。 
-		* 对于Genus Synthesis，`LIB`文件是必须的。
+* 添加`LIB`文件。
+	* `LIB`文件包括各个模块的时序信息，对于每一个Corner都会生成相应的`LIB`文件。 
+	* 对于Genus Synthesis，`LIB`文件是必须的。
 
 ```tcl
 set ff_0p88v_m40c_libs [list ${base_lib_dir}/${base_ff_0p88v_m40c_lib}.lib ${io_lib}ffg08ppv2p75vm40c.lib \
@@ -108,10 +108,10 @@ set ff_0p88v_m40c_libs [list ${base_lib_dir}/${base_ff_0p88v_m40c_lib}.lib ${io_
 ]
 ```
 
-	* 添加`LEF`文件。
-		* `LEF`整体模块各层金属的尺寸，以及各个管脚的大小和位置。
-		* 对于后续Innovus Implementation，需要在`./scripts/design_inputs_macro.tcl`添加`LEF`文件。
-		* 对于Genus Synthesis，可以暂时不添加`LEF`文件，但是这样的话Genus综合报告中不会报该Macro的面积。为了能够在后端之前大概估计设计的面积，建议在综合前添加`LEF`。
+* 添加`LEF`文件。
+	* `LEF`整体模块各层金属的尺寸，以及各个管脚的大小和位置。
+	* 对于后续Innovus Implementation，需要在`./scripts/design_inputs_macro.tcl`添加`LEF`文件。
+	* 对于Genus Synthesis，可以暂时不添加`LEF`文件，但是这样的话Genus综合报告中不会报该Macro的面积。为了能够在后端之前大概估计设计的面积，建议在综合前添加`LEF`。
 
 ```tcl
 set rm_lef_reflib [concat ${rm_lef_tech_file} ${rm_foundry_liv_dirs}/Back_End/lef/${std_lib}_110a/lef/${std_lib}.lef \
@@ -120,17 +120,17 @@ set rm_lef_reflib [concat ${rm_lef_tech_file} ${rm_foundry_liv_dirs}/Back_End/le
 ]
 ```
 
-7. 启动综合
+### 启动综合
 
-	* `b make genus_syn`
+* `b make genus_syn`
 
-8. 检查生成文件
+### 检查生成文件
 
-	* `./data/MY_TOP_MODULE-genus.v`：生成的gate level netlist
-	* `./data/func-genus.sdc`：生成的SDC
-	* `./logs/genus_synthesis.log`：综合过程中的log文件，可以查找`Error`, `Warning`等关键词检查流程是否有误。
-	* `./reports/genus/func_tt_0p90v_025c_timing.rpt`：tt corner的timing report，可以查找`VIOLATED`关键词检查时序是否满足。类似地，可以查看ss corner的timing report。
-	* `./reports/genus/area.rpt`：生成的面积报告
+* `./data/MY_TOP_MODULE-genus.v`：生成的gate level netlist
+* `./data/func-genus.sdc`：生成的SDC
+* `./logs/genus_synthesis.log`：综合过程中的log文件，可以查找`Error`, `Warning`等关键词检查流程是否有误。
+* `./reports/genus/func_tt_0p90v_025c_timing.rpt`：tt corner的timing report，可以查找`VIOLATED`关键词检查时序是否满足。类似地，可以查看ss corner的timing report。
+* `./reports/genus/area.rpt`：生成的面积报告
 
 ## Gate-level的数字仿真
 
