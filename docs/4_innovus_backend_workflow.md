@@ -343,7 +343,7 @@ createPGPin VDD -geom M8 $initX $initY [expr $initX + $stripeWidth] [expr $initY
 }
 ```
 
-* Generate Files
+* **Generate Files**
 ```tcl
 write_lef_abstract -5.8 -specifyTopLayer M8 \
 					-PGpinLayers {M8} -stripePin \
@@ -365,7 +365,7 @@ streamOut -mapFile ${rm_lef_layer_map} ../data/${rm_core_top}.gds2 -mode ALL \
 saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells
 ```
 
-* Signoff
+* **Signoff**
 ```tcl
 # save the design for signoff
 saveDesign ${rm_core_top}.signoff.enc
