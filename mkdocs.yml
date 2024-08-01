@@ -16,6 +16,9 @@ plugins:
         - zh
         - en
 
+markdown_extensions:
+  - codehilite
+
 nav:
   - Home: index.md
   - Simulation: 1_code_modification_and_simulation_workflow.md

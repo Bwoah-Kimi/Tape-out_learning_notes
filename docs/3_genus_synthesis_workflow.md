@@ -58,8 +58,8 @@ set std_lib MY_STD_LIB
 
 ### 添加RTL
 
-	* 添加RTL代码至`./rtl/`
-	* 在`./rtl/srcs.tcl`中添加文件名
+* 添加RTL代码至`./rtl/`
+* 在`./rtl/srcs.tcl`中添加文件名
 
 ```tcl
 read_hdl ../rtl/MY_MODULE_1.v
