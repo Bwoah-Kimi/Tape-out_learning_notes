@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://bwoah-kimi.github.io/Tape-out_learning_notes/</loc>
+         <lastmod>2025-02-09</lastmod>
+    </url>
+    <url>
+         <loc>https://bwoah-kimi.github.io/Tape-out_learning_notes/0_introduction/</loc>
+         <lastmod>2025-02-09</lastmod>
+    </url>
+    <url>
+         <loc>https://bwoah-kimi.github.io/Tape-out_learning_notes/1_code_modification_and_simulation_workflow/</loc>
+         <lastmod>2025-02-09</lastmod>
+    </url>
+    <url>
+         <loc>https://bwoah-kimi.github.io/Tape-out_learning_notes/2_FPGA_verification_workflow/</loc>
+         <lastmod>2025-02-09</lastmod>
+    </url>
+    <url>
+         <loc>https://bwoah-kimi.github.io/Tape-out_learning_notes/3_genus_synthesis_workflow/</loc>
+         <lastmod>2025-02-09</lastmod>
+    </url>
+    <url>
+         <loc>https://bwoah-kimi.github.io/Tape-out_learning_notes/4_innovus_backend_workflow/</loc>
+         <lastmod>2025-02-09</lastmod>
+    </url>
+    <url>
+         <loc>https://bwoah-kimi.github.io/Tape-out_learning_notes/5_virtuoso_verification/</loc>
+         <lastmod>2025-02-09</lastmod>
+    </url>
+</urlset>

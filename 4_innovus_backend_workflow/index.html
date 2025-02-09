@@ -1,0 +1,1175 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Bwoah-Kimi">
+      
+      
+        <link rel="canonical" href="https://bwoah-kimi.github.io/Tape-out_learning_notes/4_innovus_backend_workflow/">
+      
+      
+        <link rel="prev" href="../3_genus_synthesis_workflow/">
+      
+      
+        <link rel="next" href="../5_virtuoso_verification/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+    
+    
+      
+        <title>Innovus Implementation - Tape-out Learning Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.d7758b05.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrainsMono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrainsMono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#innovus-learning-notes" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="Tape-out Learning Notes" class="md-header__button md-logo" aria-label="Tape-out Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tape-out Learning Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Innovus Implementation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Tape-out Learning Notes" class="md-nav__button md-logo" aria-label="Tape-out Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tape-out Learning Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_code_modification_and_simulation_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Simulation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_FPGA_verification_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FPGA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_genus_synthesis_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Genus Synthesis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Innovus Implementation
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Innovus Implementation
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      部分命令说明
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="部分命令说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setmulticpuusage" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于setMultiCpuUsage命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createrouteblk" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于createRouteBlk命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editpin" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于editPin命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addendcap" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addEndCap命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addwelltap" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addWellTap命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addring" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addRing命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addstripe" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addStripe命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createpgpin" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于createPGPin命令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sramregister-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      带有SRAM/Register File设计的后端流程
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="带有SRAM/Register File设计的后端流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      脚本调整
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      流程说明
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      一些常见报错说明
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一些常见报错说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#impsp-9099" class="md-nav__link">
+    <span class="md-ellipsis">
+      IMPSP-9099
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_virtuoso_verification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Virtuoso Implementation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      部分命令说明
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="部分命令说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setmulticpuusage" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于setMultiCpuUsage命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createrouteblk" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于createRouteBlk命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editpin" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于editPin命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addendcap" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addEndCap命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addwelltap" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addWellTap命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addring" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addRing命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addstripe" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于addStripe命令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createpgpin" class="md-nav__link">
+    <span class="md-ellipsis">
+      关于createPGPin命令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sramregister-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      带有SRAM/Register File设计的后端流程
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="带有SRAM/Register File设计的后端流程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      脚本调整
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      流程说明
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      一些常见报错说明
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一些常见报错说明">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#impsp-9099" class="md-nav__link">
+    <span class="md-ellipsis">
+      IMPSP-9099
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="innovus-learning-notes">Innovus learning notes</h1>
+<ul>
+<li>此处大致介绍了Innovus后端流程，为带有SRAM/Register File的后端流程。</li>
+<li>运行Innovus后端需要在Genus synthesis完成的基础上进行。</li>
+<li>脚本中许多的参数设置，例如width, spacing，以及MACRO的位置摆放需要根据版图大小以及布线情况来设定，需多次迭代优化。</li>
+</ul>
+<h2 id="_1">部分命令说明</h2>
+<ul>
+<li>在讲述具体的后端流程之前，有必要对一些命令进行说明，或许会对后端流程debugging有一定帮助</li>
+<li>在运行过程中，如果碰到报错，或者对于某些命令参数选项不确定，可以在Innovus命令行中输入<code>man &lt;CMD_Name&gt;</code>来查看官方Manual以获得相应信息。</li>
+<li>个人感觉，Manual对于命令的说明较为清晰，配合ChatGPT可以获得较好的效果，而对于报错信息，官方手册以及网络信息都比较欠缺，需更有针对性进行查找。</li>
+</ul>
+<h3 id="setmulticpuusage">关于<code>setMultiCpuUsage</code>命令</h3>
+<ul>
+<li>若使用<code>setMultiCpuUsage -localCpu max -cpuAutoAdjust true -verbose</code>，可能会导致Innovus闪退。大致原因是CPU核数过多，导致服务器终止进程。</li>
+<li>建议使用<code>setMultiCpuUsage -localCpu 32</code>，可以保证Innovus稳定运行。</li>
+</ul>
+<h3 id="createrouteblk">关于<code>createRouteBlk</code>命令</h3>
+<ul>
+<li>Description: creates a routing blockage object. The object area prevents routing of specified metal layers, signal routes and hierarchical instances in this area.</li>
+<li>对于顶层模块集成的后端流程，需要考虑使用该命令</li>
+<li>SRAM/Register File的LEF文件中定义了哪些Layer被占用，无需另外使用<code>createRouteBlk</code>在SRAM/Register File周围设置Routing Blockage</li>
+<li>顶层模块集成时，可以考虑减小Routing Blockage的<code>-spacing</code>选项，供<code>ecoRoute</code>有更多空间布线以修复DRC</li>
+<li><code>-pgnetonly</code><ul>
+<li>Specifies that the routing blockage is to be <strong>applied only on power or ground net</strong> special routes and not on signal nets.</li>
+<li>This option affects only commands that create special routes, such as <code>addRing</code>, <code>addStripe</code>, or <code>sroute</code>, when they are used for PG nets.</li>
+<li><code>NanoRoute</code>, which is used to connect tie-high or tie-low connections or to connect to secondary standard-cell power-pin connections, is also not affected by this option.</li>
+</ul>
+</li>
+<li>Use this option during power planning to prevent power routes from getting too close to block edges and, as a result, blocking signal pin access or causing congestion in narrow channels.</li>
+<li><code>-exceptpgnet</code><ul>
+<li>Specifies that the routing blockage is to be <strong>applied on a signal net routing</strong> and not on power or ground net routing.</li>
+<li>Use this option to block signal routing above or around a sensitive block to avoid noise from nearby signal nets but still allow power connections to go through the blockage.</li>
+<li>Blocking the signal net routing helps in avoiding cross talk or coupling caused by signal routes.</li>
+</ul>
+</li>
+</ul>
+<h3 id="editpin">关于<code>editPin</code>命令</h3>
+<ul>
+<li>对于大部分的数字模块，管脚数量是成百上千的，无法手动写命令设置每一个管脚。</li>
+<li>在Innovus GUI界面中上方工具栏选择<code>Edit -&gt; Pin Editor</code>根据需求添加管脚。</li>
+<li>在<code>innovus.cmd</code>文件中可以看到每一步操作对应的命令，其中就有我们所需要的<code>editPin</code>命令。</li>
+<li>由于奇数层为横向金属，偶数层为纵向金属，因此对于Top/Bottom可以选择M4/M6等金属，Left/Right可以选择M3/M5等金属。</li>
+<li><strong>注意</strong>：<ul>
+<li>模块的P/G不需要在这一步设置管脚。在布局布线完成之后，将会使用<code>createPGPin</code>生成专门的P/G管脚。</li>
+<li>查看命令是否有多余的选项，例如<code>-USE GROUND</code>，可能会导致后续步骤（例如CTS）无法进行</li>
+</ul>
+</li>
+</ul>
+<h3 id="addendcap">关于<code>addEndCap</code>命令</h3>
+<ul>
+<li>In digital IC design, especially with automated P&amp;R tools, the standard cells are organized in rows throughout the silicon area.</li>
+<li>These standard cells are the building blocks of the design, containing logic gates, flip-flops, and other digital circutry.</li>
+<li>Endcap cells are used to <strong>fill the remaining space at the ends of standard cell rows</strong> when the last standard cell doesn't perfectly fit in the row's length.</li>
+<li>They <strong>provide electrical and physical isolation</strong> between the active area of the silicon and the surrounding structures, suc has the scribe line or the edge of the die.</li>
+</ul>
+<h3 id="addwelltap">关于<code>addWellTap</code>命令</h3>
+<ul>
+<li>Welltap cells <strong>ensure proper electrical connection and prevent latch-up</strong> in CMOS processes.</li>
+<li>Welltap cells help prevent latch-up by <strong>providing a low-resistance path to ground or VDD for the substrate or well</strong> in which transistors are fabricated.</li>
+<li>Welltaps are strategically placed throughout the IC layout, especially near power and ground connections. </li>
+<li>Their placement is often governed by design rules specified by the foundry.</li>
+</ul>
+<h3 id="addring">关于<code>addRing</code>命令</h3>
+<p>简单来说，在模块的四周，以及内部MACRO（例如SRAM/Register File）的四周需添加Power ring，用于给旁边的功能单元供电。</p>
+<ul>
+<li>A power ring <strong>provides a continuous path for power and ground connections</strong> around the periphery of the core area of the entire chip.</li>
+<li>This ring is essential for distributing power and ground connections uniformly across the chip to ensure that all parts of the IC receive a stable power supply and maintain a solid ground reference.</li>
+<li>Purpose and functionality: stable power supply, noise reduction, thermal management</li>
+</ul>
+<h3 id="addstripe">关于<code>addStripe</code>命令</h3>
+<ul>
+<li>A power stripe is a layout technique used to provide stable power (VDD) and ground (GND) connections to the various logic units and circuit blocks on the chip.</li>
+<li>Power stripes are implemented by introducing wide metal lines (stripes) into the chip layout that connect to the power and ground supply, ensuring that power distribution across the chip is uniform and grounding is effective.</li>
+<li>Benefits<ul>
+<li>Reducing Voltage Drop (IR Drop)</li>
+<li>Reducing Electromagnetic Interference (EMI)</li>
+<li>Improving Efficiency of Power Distribution</li>
+<li>Power Management</li>
+</ul>
+</li>
+<li>简单来说，需要在版图的全部区域添加Power stripe</li>
+<li>偶数层设置<code>-direction vertical</code>，奇数层设置<code>-direction horizontal</code>，由此构成Power mesh（供电网格）</li>
+<li>为了避免底层金属布线过于密集，可以考虑在较低层金属（例如M6）设置较为稀疏的Power stripe，在较高层金属（例如M8）设置较为密集</li>
+<li>后续使用<code>sroute</code>命令将Power stripe连接起来，只需连接到最低层的Power stripe即可。</li>
+</ul>
+<h3 id="createpgpin">关于<code>createPGPin</code>命令</h3>
+<ul>
+<li>将最顶层的金属走线作为P/G Pin，因此此处生成的P/G Pin需要和此前使用<code>addStripe</code>生成的P/G金属条保持重合。</li>
+<li>因为需要保持一定间隔连续生成许多条P/G Pin，可以用一层For循环来减少工作量。</li>
+</ul>
+<h2 id="sramregister-file">带有SRAM/Register File设计的后端流程</h2>
+<h3 id="_2">脚本调整</h3>
+<ul>
+<li>在<code>./scripts/design_input_macro.tcl</code>中添加SRAM/Register File的<code>LEF</code></li>
+<li>在<code>./scripts/tech.tcl</code>中添加SRAM/Register File的<code>LIB</code></li>
+<li>对于顶层模块的集成，如果有一些子模块已经完成后端，也需要在这两个位置分别加入<code>LIB</code>和<code>LEF</code>文件。实际上<code>LIB</code>文件应该在Genus综合前就添加，否则综合时无法读取其所需的时序信息。</li>
+<li>连接Power<ul>
+<li>在<code>./scripts/init_invs.tcl</code>中修改模块的P/G Connection。</li>
+<li>如果需要区分电源域，例如SRAM需要单独供电，则需要在此定义<code>VDD</code>, <code>VDD_SRAM</code>两个Power Net</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">set</span><span class="w"> </span>init_pwr_net<span class="w"> </span><span class="k">{</span><span class="nv">VDD</span><span class="w"> </span>VDD_SRAM<span class="k">}</span>
+</code></pre></div>
+
+<h3 id="_3">流程说明</h3>
+<p>此处以<code>Jan15_HuanCun</code>模块的后端流程为例</p>
+<ul>
+<li><strong>Start Innovus</strong></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/work/home/ztzhu/my_projects/xiangshan/Jan15/backend_huancun/
+gvim<span class="w"> </span>huancun_innovus_script.tcl<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>work
+b<span class="w"> </span>innovus
+</code></pre></div>
+
+<ul>
+<li><strong>Load design</strong>
+    在Innovus的命令行中输入如下命令，下同</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nv">date</span>
+<span class="nv">setMultiCpuUsage</span><span class="w"> </span><span class="o">-</span>localCpu<span class="w"> </span><span class="mi">32</span>
+<span class="k">set</span><span class="w"> </span>start_time<span class="w"> </span><span class="k">[</span><span class="nb">clock</span><span class="w"> </span>seconds<span class="k">]</span>
+<span class="nb">source</span><span class="w"> </span><span class="o">-</span>verbose<span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>core_config.tcl
+<span class="nb">source</span><span class="w"> </span><span class="o">-</span>verbose<span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>tech.tcl
+<span class="nb">source</span><span class="w"> </span><span class="o">-</span>verbose<span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>init_invs.tcl
+<span class="nb">source</span><span class="w"> </span><span class="o">-</span>verbose<span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>invs_settings.tcl
+</code></pre></div>
+
+<ul>
+<li><strong>Set FloorPlan</strong><ul>
+<li>根据Genus综合的面积报告以及整体版图规划选择版图的长和宽</li>
+<li>Innovus右上角的Floorplan View可以看到SRAM/Register File等MACRO的大小
+<img alt="Floorplan View" src="../figs/floorplan.png" /></li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">set</span><span class="w"> </span>cell_height<span class="w"> </span><span class="mf">0.7</span>
+<span class="k">set</span><span class="w"> </span>macro_halo_spc<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">$cell_height</span><span class="k">]</span>
+<span class="k">set</span><span class="w"> </span>macro_halo_spc_4<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">$cell_height</span><span class="k">]</span>
+<span class="k">set</span><span class="w"> </span>macro_halo_spc_2<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">$cell_height</span><span class="k">]</span>
+<span class="c"># set macro_halo_spc [expr 4 * $cell_height]</span>
+<span class="k">set</span><span class="w"> </span>die_sizex<span class="w"> </span><span class="mi">900</span>
+<span class="k">set</span><span class="w"> </span>die_sizey<span class="w"> </span><span class="mi">850</span>
+<span class="nv">floorPlan</span><span class="w"> </span><span class="o">-</span>d<span class="w"> </span><span class="nv">$die_sizex</span><span class="w"> </span><span class="nv">$die_sizey</span><span class="w"> </span><span class="mf">3.5</span><span class="w"> </span><span class="mf">3.5</span><span class="w"> </span><span class="mf">3.5</span><span class="w"> </span><span class="mf">3.5</span>
+<span class="nv">uiSetTool</span><span class="w"> </span>select
+<span class="nv">getIoFlowFlag</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Place SRAM and other macros</strong><ul>
+<li>见<a href="../my_scripts/place_macro.tcl">place_macro.tcl</a></li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>place_macro.tcl
+</code></pre></div>
+
+<ul>
+<li><strong>Add halos and routing blockage around macros</strong><ul>
+<li>可以通过添加<code>RO R90 R180 MX MX90 MY MY90</code>等决定SRAM的摆放方向</li>
+<li>例如：<code>placeInstance $sram_macro 21.0 21.0 R180</code></li>
+<li>需要注意，22nm工艺不支持90度旋转</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c"># add Halos around MACROS</span>
+<span class="nv">setInstancePlacementStatus</span><span class="w"> </span><span class="o">-</span>allHardMacros<span class="w"> </span><span class="o">-</span>status<span class="w"> </span>fixed
+<span class="nv">addHaloToBlock</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$macro_halo_spc_4</span><span class="w"> </span><span class="nv">$macro_halo_spc_4</span><span class="w"> </span><span class="nv">$macro_halo_spc_4</span><span class="w"> </span><span class="nv">$macro_halo_spc_4</span><span class="k">]</span><span class="w"> </span><span class="o">-</span>allMacro
+
+<span class="c"># add Routing Blockage if necessary</span>
+<span class="k">for</span><span class="w"> </span><span class="k">{set</span><span class="w"> </span>i<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">$i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nv">7</span><span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nb">incr</span><span class="w"> </span><span class="nv">$i</span><span class="k">}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>macroName<span class="w"> </span><span class="s2">&quot;sram_$i&quot;</span>
+<span class="w">    </span><span class="nv">createRouteBlk</span><span class="w"> </span><span class="o">-</span>cover<span class="w"> </span><span class="o">-</span>inst<span class="w"> </span><span class="k">[set</span><span class="w"> </span><span class="nv">$macroName</span><span class="k">]</span><span class="w"> </span><span class="o">-</span>layer<span class="w"> </span><span class="k">{</span><span class="nv">M1</span><span class="w"> </span>M2<span class="w"> </span>M3<span class="w"> </span>M4<span class="w"> </span>M5<span class="w"> </span>M6<span class="w"> </span>M7<span class="k">}</span><span class="w"> </span><span class="o">-</span>spacing<span class="w"> </span><span class="nv">$macro_halo_spc</span>
+<span class="k">}</span>
+<span class="k">for</span><span class="w"> </span><span class="k">{set</span><span class="w"> </span>i<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">$i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nv">6</span><span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nb">incr</span><span class="w"> </span><span class="nv">$i</span><span class="k">}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>macroName<span class="w"> </span><span class="s2">&quot;rf_$i&quot;</span>
+<span class="w">    </span><span class="nv">createRouteBlk</span><span class="w"> </span><span class="o">-</span>cover<span class="w"> </span><span class="o">-</span>inst<span class="w"> </span><span class="k">[set</span><span class="w"> </span><span class="nv">$macroName</span><span class="k">]</span><span class="w"> </span><span class="o">-</span>layer<span class="w"> </span><span class="k">{</span><span class="nv">M1</span><span class="w"> </span>M2<span class="w"> </span>M3<span class="w"> </span>M4<span class="w"> </span>M5<span class="w"> </span>M6<span class="w"> </span>M7<span class="k">}</span><span class="w"> </span><span class="o">-</span>spacing<span class="w"> </span><span class="nv">$macro_halo_spc</span>
+<span class="k">}</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Define P/G Connections</strong><ul>
+<li>见<a href="../my_scripts/pg_pin.tcl">pg_pin.tcl</a></li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>power_pins.tcl
+</code></pre></div>
+
+<ul>
+<li><strong>Add Pins</strong><ul>
+<li>使用<code>editPin</code>命令，见<a href="../my_scripts/add_pin.tcl">add_pin.tcl</a></li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>add_pin.tcl
+</code></pre></div>
+
+<ul>
+<li><strong>Add EndCaps, WellTaps</strong></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">set</span><span class="w"> </span>itx<span class="w"> </span><span class="nv">$rm_tap_cell_distance</span>
+<span class="k">set</span><span class="w"> </span>tap_rule<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="nv">$itx</span><span class="o">/</span><span class="mi">4</span><span class="k">]</span>
+
+<span class="nv">setPlaceMode</span><span class="w"> </span><span class="o">-</span>place_detail_legalization_inst_gap<span class="w"> </span><span class="mi">2</span>
+<span class="nv">setPlaceMode</span><span class="w"> </span><span class="o">-</span>place_detail_use_no_diffusion_one_site_filler<span class="w"> </span>false
+
+<span class="nv">setEndCapMode</span><span class="w"> </span><span class="o">-</span>reset
+<span class="nv">setEndCapMode</span><span class="w"> </span><span class="o">-</span>rightEdge<span class="w"> </span><span class="nv">$endcap_left</span><span class="w"> </span><span class="o">-</span>leftEdge<span class="w"> </span><span class="nv">$endcap_right</span>
+<span class="nv">addEndCap</span>
+
+<span class="nv">addWellTap</span><span class="w"> </span><span class="o">-</span>cell<span class="w"> </span><span class="nv">${rm_tap_cell}</span><span class="w"> </span><span class="o">-</span>cellInterval<span class="w"> </span><span class="nv">$rm_tap_cell_distance</span><span class="w"> </span><span class="o">-</span>checkerboard
+<span class="nv">allWellTap</span><span class="w"> </span><span class="o">-</span>prefix<span class="w"> </span>DECAP<span class="w"> </span><span class="o">-</span>cellInterval<span class="w"> </span><span class="nv">$rm_tap_cell_distance</span><span class="w"> </span><span class="o">-</span>cell<span class="w"> </span><span class="nv">${dcap_cell}</span><span class="w"> </span><span class="o">-</span>skipRow<span class="w"> </span><span class="mi">1</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Add Power Rings, Power Stripes</strong><ul>
+<li>见<a href="../my_scripts/power_ring.tcl">power_ring.tcl</a></li>
+<li>应当可以看到走在SRAM/Register File MACRO上的Power。以下图为例，可以看到M6层的Power Stripe到M4层SRAM VDD的VIA，说明给该MACRO提供了供电。</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>power_ring.tcl
+
+<span class="c"># add power stripes at four sides of SRAM</span>
+<span class="c"># M6 (Vertical)</span>
+<span class="nv">addStripe</span><span class="w"> </span><span class="o">-</span>start_offset<span class="w"> </span><span class="mf">0.7</span><span class="w"> </span><span class="o">-</span>direction<span class="w"> </span>vertical<span class="w"> </span><span class="o">-</span>block_ring_top_layer_limit<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>padcore_ring_bottom_layer<span class="w"> </span>M1<span class="w"> </span><span class="o">-</span>set_to_set_distance<span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="o">-</span>stacked_via_top_layer<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>padcore_ring_top_layer_limit<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>spacing<span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="o">-</span>layer<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>block_ring_bottom_layer_limit<span class="w"> </span>M1<span class="w"> </span><span class="o">-</span>width<span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span>nets<span class="w"> </span><span class="k">{</span><span class="nv">VSS</span>,<span class="w"> </span>VDD_SRAM<span class="k">}</span><span class="w"> </span><span class="o">-</span>stacked_via_bottom_layar<span class="w"> </span>M1
+
+<span class="c"># M7 (Horizontal)</span>
+<span class="nv">addStripe</span><span class="w"> </span><span class="o">-</span>start_offset<span class="w"> </span><span class="mf">0.7</span><span class="w"> </span><span class="o">-</span>direction<span class="w"> </span>horizontal<span class="w"> </span><span class="o">-</span>block_ring_top_layer_limit<span class="w"> </span>M7<span class="w"> </span><span class="o">-</span>padcore_ring_bottom_layer<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>set_to_set_distance<span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="o">-</span>stacked_via_top_layer<span class="w"> </span>M7<span class="w"> </span><span class="o">-</span>padcore_ring_top_layer_limit<span class="w"> </span>M7<span class="w"> </span><span class="o">-</span>spacing<span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">-</span>layer<span class="w"> </span>M7<span class="w"> </span><span class="o">-</span>block_ring_bottom_layer_limit<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>width<span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span>nets<span class="w"> </span><span class="k">{</span><span class="nv">VSS</span>,<span class="w"> </span>VDD_SRAM<span class="k">}</span><span class="w"> </span><span class="o">-</span>stacked_via_bottom_layar<span class="w"> </span>M6
+
+<span class="c"># M8 (Vertical)</span>
+<span class="nv">addStripe</span><span class="w"> </span><span class="o">-</span>start_offset<span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">-</span>direction<span class="w"> </span>vertical<span class="w"> </span><span class="o">-</span>block_ring_top_layer_limit<span class="w"> </span>M8<span class="w"> </span><span class="o">-</span>padcore_ring_bottom_layer<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>set_to_set_distance<span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="o">-</span>stacked_via_top_layer<span class="w"> </span>M8<span class="w"> </span><span class="o">-</span>padcore_ring_top_layer_limit<span class="w"> </span>M8<span class="w"> </span><span class="o">-</span>spacing<span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">-</span>layer<span class="w"> </span>M8<span class="w"> </span><span class="o">-</span>block_ring_bottom_layer_limit<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>width<span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span>nets<span class="w"> </span><span class="k">{</span><span class="nv">VSS</span>,<span class="w"> </span>VDD_SRAM<span class="k">}</span><span class="w"> </span><span class="o">-</span>stacked_via_bottom_layar<span class="w"> </span>M6
+
+<span class="nv">sroute</span><span class="w"> </span><span class="o">-</span>connect<span class="w"> </span><span class="k">{</span><span class="w"> </span><span class="nv">corePin</span><span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="o">-</span>layerChangeRange<span class="w"> </span><span class="k">{</span><span class="w"> </span><span class="nv">M1</span><span class="w"> </span>M6<span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="o">-</span>blockPinTarget<span class="w"> </span><span class="k">{</span><span class="w"> </span><span class="nv">nearestRingStripe</span><span class="w"> </span>nearestTarget<span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="o">-</span>padPinPortConnect<span class="w"> </span><span class="k">{</span><span class="w"> </span><span class="nv">allPort</span><span class="w"> </span>oneGeom<span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="o">-</span>checkAlignedSecondaryPin<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span>blockPin<span class="w"> </span>useLef<span class="w">  </span><span class="o">-</span>allowJogging<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">-</span>crossoverViaBottomLayer<span class="w"> </span>M1<span class="w"> </span><span class="o">-</span>allowLayerChange<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span>targetViaTopLayer<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>crossoverViaTopLayer<span class="w"> </span>M6<span class="w"> </span><span class="o">-</span>targetViaBottomLayer<span class="w"> </span>M1<span class="w"> </span><span class="o">-</span>nets<span class="w"> </span><span class="k">{</span><span class="nv">VDD</span><span class="w"> </span>VSS<span class="w"> </span>VDD_SRAM<span class="k">}</span>
+
+<span class="nv">editPowerVia</span><span class="w"> </span><span class="o">-</span>skip_via_on_pin<span class="w"> </span>Standardcell<span class="w"> </span><span class="o">-</span>bottom_layer<span class="w"> </span>M1<span class="w"> </span><span class="o">-</span>add_vias<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span>top_layer<span class="w"> </span>M6
+</code></pre></div>
+
+<ul>
+<li><strong>Placement</strong><ul>
+<li><code>-routeTopRoutingLayer 7</code>说明允许信号线最高使用M7层的金属。根据整体版图情况，可以选择M5-M7层作为布信号线所允许的最高层金属。通常来说，版图最高层金属只会有P/G电源线，在此例中，为M8层金属。</li>
+<li><code>-routeBottomRoutingLayer 2</code>说明允许信号线最低使用M2层的金属。</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nv">setTieHiLoMode</span><span class="w">  </span><span class="o">-</span>cell<span class="w"> </span><span class="nv">$rm_tie_hi_lo_list</span><span class="w"> </span><span class="err">\</span>
+<span class="w">                                </span><span class="nv">-maxFanout</span><span class="w"> </span><span class="mi">8</span>
+<span class="nv">deleteTieHiLo</span>
+
+<span class="nv">setPlaceMode</span><span class="w"> </span><span class="o">-</span>reset
+<span class="nv">setPlaceMode</span><span class="w"> </span><span class="o">-</span>place_detail_legalization_inst_gap<span class="w"> </span><span class="mi">2</span>
+<span class="nv">setPlaceMode</span><span class="w"> </span><span class="o">-</span>place_detail_use_no_diffusion_one_site_filler<span class="w"> </span>false
+
+<span class="c"># to address the issue regarding scan chains</span>
+<span class="c"># setPlaceMode -place_global_ignore_scan false</span>
+
+<span class="nv">setNanoRouteMode</span><span class="w"> </span><span class="o">-</span>routeTopRoutingLayer<span class="w"> </span><span class="mi">7</span>
+<span class="nv">setNanoRouteMode</span><span class="w"> </span><span class="o">-</span>routeBottomRoutingLayer<span class="w"> </span><span class="mi">2</span>
+<span class="nv">setPlaceMode</span><span class="w"> </span><span class="o">-</span>fp<span class="w"> </span>false
+<span class="nv">setAnalysisMode</span><span class="w"> </span><span class="o">-</span>aocv<span class="w"> </span>false
+
+<span class="nv">placeDesign</span>
+<span class="nv">addTieHiLo</span>
+
+<span class="nv">place_opt_design</span><span class="w"> </span><span class="o">-</span>incremental<span class="w">  </span><span class="o">-</span>out_dir<span class="w"> </span>..<span class="o">/</span>reports<span class="o">/</span>layout<span class="o">/</span>INNOVUS_RPT<span class="w"> </span><span class="o">-</span>prefix<span class="w"> </span>place
+<span class="nv">timeDesign</span><span class="w"> </span><span class="o">-</span>preCTS<span class="w"> </span><span class="o">-</span>outDir<span class="w"> </span>..<span class="o">/</span>reports<span class="o">/</span>layout<span class="o">/</span>INNOVUS_RPT
+
+<span class="c"># preCTS reports</span>
+<span class="k">set</span><span class="w"> </span>myOption<span class="w"> </span><span class="s2">&quot;preCTS&quot;</span>
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>intermediate_reporting.tcl
+</code></pre></div>
+
+<ul>
+<li><strong>Clock Tree Synthesis (CTS)</strong></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nv">set_ccopt_property</span><span class="w"> </span><span class="o">-</span>update_io_latency<span class="w"> </span>true
+<span class="nv">set_ccopt_property</span><span class="w"> </span><span class="o">-</span>force_update_io_latency<span class="w"> </span>true
+<span class="nv">set_ccopt_property</span><span class="w"> </span><span class="o">-</span>enable_all_views_for_io_latency_update<span class="w"> </span>true
+<span class="nv">set_ccopt_property</span><span class="w"> </span><span class="o">-</span>max_fanout<span class="w"> </span><span class="nv">${rm_cts_max_fanout}</span>
+<span class="nv">set_ccopt_property</span><span class="w"> </span><span class="o">-</span>effort<span class="w"> </span>high
+<span class="nv">set_ccopt_property</span><span class="w"> </span>buffer_cells<span class="w"> </span><span class="nv">$rm_clock_buf_cap_cell</span>
+<span class="nv">set_ccopt_property</span><span class="w"> </span>inverter_cells<span class="w"> </span><span class="nv">$rm_clock_inv_cap_cell</span>
+<span class="nv">set_ccopt_property</span><span class="w"> </span>clock_gating_cells<span class="w"> </span><span class="nv">$rm_clock_icg_cell</span>
+
+<span class="nv">set_ccopt_mode</span><span class="w"> </span><span class="o">-</span>cts_use_min_max_path_delay<span class="w"> </span>false<span class="w"> </span><span class="err">\</span>
+<span class="w">                                </span><span class="nv">-cts_target_slew</span><span class="w"> </span><span class="nv">$rm_max_clock_transition</span><span class="w"> </span><span class="err">\</span>
+<span class="w">                                </span><span class="nv">-cts_target_skew</span><span class="w"> </span><span class="mf">0.15</span><span class="w"> </span><span class="err">\</span>
+<span class="w">                                </span><span class="nv">-modify_clock_latency</span><span class="w"> </span>false
+
+<span class="c"># set_ccopt_property balance_mode cluster</span>
+<span class="nv">create_ccopt_clock_tree_spec</span><span class="w"> </span><span class="o">-</span>file<span class="w"> </span>..<span class="o">/</span>data<span class="o">/</span><span class="nv">${rm_core_top}</span><span class="o">-</span>ccopt_cts.spec
+<span class="nv">create_ccopt_clock_tree_spec</span>
+
+<span class="nv">ccopt_design</span><span class="w"> </span><span class="o">-</span>check_prerequisites
+<span class="nv">ccopt_design</span><span class="w"> </span><span class="o">-</span>outDir<span class="w"> </span>..<span class="o">/</span>reports<span class="o">/</span>layout<span class="o">/</span>INNOVUS_RPT<span class="w"> </span><span class="o">-</span>prefix<span class="w"> </span>ccopt
+
+<span class="c"># Report design after CTS</span>
+<span class="k">set</span><span class="w"> </span>myOption<span class="w"> </span><span class="s2">&quot;clocks&quot;</span>
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>intermediate_reporting.tcl
+</code></pre></div>
+
+<ul>
+<li><strong>Route</strong></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nv">setExtractRCMode</span><span class="w"> </span><span class="o">-</span>engine<span class="w"> </span>postRoute<span class="w"> </span><span class="o">-</span>effortLevel<span class="w"> </span>medium<span class="w"> </span><span class="o">-</span>tQuantusForPostRoute<span class="w"> </span>true
+
+<span class="k">set</span><span class="w"> </span>NanoRouteMode<span class="w"> </span><span class="o">-</span>routeWithTimingDriven<span class="w"> </span>true<span class="w"> </span><span class="err">\</span>
+<span class="w">                                </span><span class="nv">-routeWithSiDriven</span><span class="w"> </span>true<span class="w"> </span><span class="err">\</span>
+<span class="w">                                </span><span class="nv">-routeWithLithoDriven</span><span class="w"> </span>false<span class="w"> </span><span class="err">\</span>
+<span class="w">                            </span><span class="nv">-routeDesignRouteClockNetsFirst</span><span class="w"> </span>true<span class="w"> </span><span class="err">\</span>
+<span class="w">                                </span><span class="nv">-routeReserveSpaceForMultiCut</span><span class="w"> </span>false<span class="w"> </span><span class="err">\</span>
+<span class="w">                                </span><span class="nv">-drouteUseMultiCutViaEffort</span><span class="w"> </span>low<span class="w"> </span><span class="err">\</span>
+<span class="w">                            </span><span class="nv">-drouteFixAntenna</span><span class="w"> </span>true
+
+<span class="nv">routeDesign</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Post-route</strong></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nv">setExtractRCMode</span><span class="w"> </span><span class="o">-</span>engine<span class="w"> </span>postRoute<span class="w"> </span><span class="o">-</span>effortLeve<span class="w"> </span>medium<span class="w"> </span><span class="o">-</span>tQuantusForPostRoute<span class="w"> </span>true
+<span class="nv">setOptMode</span><span class="w"> </span><span class="o">-</span>verbose<span class="w"> </span>true
+<span class="nv">setOptMode</span><span class="w"> </span><span class="o">-</span>highEffortOptCells<span class="w"> </span><span class="nv">$hold_fixing_cells</span>
+<span class="nv">setOptMode</span><span class="w"> </span><span class="o">-</span>holdFixingCells<span class="w"> </span><span class="nv">$hold_fixing_cells</span>
+<span class="nv">optDesign</span><span class="w"> </span><span class="o">-</span>postRoute<span class="w"> </span><span class="o">-</span>drv
+<span class="nv">optDesign</span><span class="w"> </span><span class="o">-</span>postRoute<span class="w"> </span><span class="o">-</span>incr
+<span class="nv">optDesign</span><span class="w"> </span><span class="o">-</span>postRoute<span class="w"> </span><span class="o">-</span>hold
+
+<span class="nv">timeDesign</span><span class="w"> </span><span class="o">-</span>postRoute<span class="w"> </span><span class="o">-</span>outDir<span class="w"> </span>..<span class="o">/</span>reports<span class="o">/</span>layout<span class="o">/</span>INNOVUS_RPT
+<span class="nv">timeDesign</span><span class="w"> </span><span class="o">-</span>postRoute<span class="w"> </span><span class="o">-</span>hold<span class="w"> </span><span class="o">-</span>outDir<span class="w"> </span>..<span class="o">/</span>reports<span class="o">/</span>layout<span class="o">/</span>INNOVUS_RPT
+
+<span class="c"># Report design after routing</span>
+<span class="k">set</span><span class="w"> </span>myOption<span class="w"> </span><span class="s2">&quot;postRoute&quot;</span>
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>intermediate_reporting.tcl
+
+<span class="c"># Incrementtal routing to fix shorts</span>
+<span class="nv">addTieHiLo</span>
+
+<span class="nv">setNanoRouteMode</span><span class="w"> </span><span class="o">-</span>routeWithEco<span class="w"> </span>true<span class="w"> </span><span class="o">-</span>drouteFixAntenna<span class="w"> </span>true<span class="w"> </span><span class="o">-</span>routeInsertAntennaDiode<span class="w"> </span>true
+<span class="nv">globalDetailRoute</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Add Filler Cells</strong></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nv">setFillerMode</span><span class="w"> </span><span class="o">-</span>scheme<span class="w"> </span>locationFirst<span class="w"> </span><span class="err">\</span>
+<span class="w">                        </span><span class="nv">-minHole</span><span class="w"> </span>true<span class="w"> </span><span class="err">\</span>
+<span class="w">                        </span><span class="nv">-fitGap</span><span class="w"> </span>true<span class="w"> </span><span class="err">\</span>
+<span class="w">                        </span><span class="nv">-diffCellViol</span><span class="w"> </span>true
+
+<span class="nv">addFiller</span><span class="w"> </span><span class="o">-</span>cell<span class="w"> </span><span class="nv">$rm_fill_cells</span>
+<span class="nv">ecoRoute</span><span class="w"> </span><span class="o">-</span>fix_drc
+
+<span class="nv">setFillerMode</span><span class="w"> </span><span class="o">-</span>ecoMode<span class="w"> </span>true
+<span class="nv">addFiller</span><span class="w"> </span><span class="o">-</span>fixDRC<span class="w"> </span><span class="o">-</span>fitGap<span class="w"> </span><span class="o">-</span>cell<span class="w"> </span><span class="nv">$rm_fill_cells</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Create P/G Pins</strong><ul>
+<li>在此处定义的P/G管脚与此前定义的最顶层的Power Stripe重叠。在此例中，是M8层金属。</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c"># create PG Pins</span>
+<span class="k">for</span><span class="w"> </span><span class="k">{</span><span class="w"> </span><span class="k">set</span><span class="w"> </span>i<span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">$i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nv">22</span><span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nb">incr</span><span class="w"> </span>i<span class="k">}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>initX<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">$i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">40</span><span class="k">]</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>initY<span class="w"> </span><span class="mf">3.5</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>stripeHeight<span class="w"> </span><span class="mi">843</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>stripeWidth<span class="w"> </span><span class="mi">2</span><span class="w">   </span>
+<span class="w">    </span>createPGPin<span class="w"> </span>VDD<span class="w"> </span><span class="o">-</span>geom<span class="w"> </span>M8<span class="w"> </span><span class="nv">$initX</span><span class="w"> </span><span class="nv">$initY</span><span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="nv">$initX</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">$stripeWidth</span><span class="k">]</span><span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="nv">$initY</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">$stripeHeight</span><span class="k">]</span>
+<span class="k">}</span>
+
+<span class="k">for</span><span class="w"> </span><span class="k">{</span><span class="w"> </span><span class="k">set</span><span class="w"> </span>i<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">$i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nv">22</span><span class="w"> </span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nb">incr</span><span class="w"> </span>i<span class="k">}</span><span class="w"> </span><span class="k">{</span>
+<span class="k">set</span><span class="w"> </span>initX<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">$i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">40</span><span class="k">]</span>
+<span class="k">set</span><span class="w"> </span>initY<span class="w"> </span><span class="mf">3.5</span>
+<span class="k">set</span><span class="w"> </span>stripeHeight<span class="w"> </span><span class="mi">843</span>
+<span class="k">set</span><span class="w"> </span>stripeWidth<span class="w"> </span><span class="mi">2</span><span class="w">  </span>
+createPGPin<span class="w"> </span>VDD<span class="w"> </span><span class="o">-</span>geom<span class="w"> </span>M8<span class="w"> </span><span class="nv">$initX</span><span class="w"> </span><span class="nv">$initY</span><span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="nv">$initX</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">$stripeWidth</span><span class="k">]</span><span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="nv">$initY</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">$stripeHeight</span><span class="k">]</span>
+<span class="k">}</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Generate Files</strong></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nv">write_lef_abstract</span><span class="w"> </span><span class="o">-</span><span class="mf">5.8</span><span class="w"> </span><span class="o">-</span>specifyTopLayer<span class="w"> </span>M8<span class="w"> </span><span class="err">\</span>
+<span class="w">                    </span><span class="nv">-PGpinLayers</span><span class="w"> </span><span class="k">{</span><span class="nv">M8</span><span class="k">}</span><span class="w"> </span><span class="o">-</span>stripePin<span class="w"> </span><span class="err">\</span>
+<span class="w">                    </span><span class="nv">-cutObsMinSpacing</span><span class="w"> </span><span class="err">\</span>
+<span class="w">                </span><span class="nv">..</span><span class="o">/</span>models<span class="o">/</span>lef<span class="o">/</span><span class="nv">${rm_core_top}</span>.lef
+
+<span class="nv">write_sdf</span><span class="w"> </span><span class="o">-</span>min_view<span class="w"> </span>ff_0p88v_125c_view<span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="nv">-typ_view</span><span class="w"> </span>tt_0p80v_25c_view<span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="nv">-max_view</span><span class="w"> </span>ss_0p72v_m40c_view<span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="nv">-recompute_parallel_arcs</span><span class="w"> </span>..<span class="o">/</span>models<span class="o">/</span>sdf<span class="o">/</span><span class="nv">${rm_core_top}</span>.sdf
+
+<span class="nv">write_sdc</span><span class="w"> </span>..<span class="o">/</span>models<span class="o">/</span>sdc<span class="o">/</span><span class="nv">${rm_core_top}</span>.sdc
+
+<span class="nv">streamOut</span><span class="w"> </span><span class="o">-</span>mapFile<span class="w"> </span><span class="nv">${rm_lef_layer_map}</span><span class="w"> </span>..<span class="o">/</span>data<span class="o">/</span><span class="nv">${rm_core_top}</span>.gds2<span class="w"> </span><span class="o">-</span>mode<span class="w"> </span>ALL<span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="nv">-merge</span><span class="w"> </span><span class="s2">&quot;/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds&quot;</span>
+<span class="w">        </span><span class="o">/</span><span class="nv">path</span><span class="o">/</span>to<span class="o">/</span>my<span class="o">/</span>sram<span class="o">/</span>gds<span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="o">/</span><span class="nv">path</span><span class="o">/</span>to<span class="o">/</span>my<span class="o">/</span>macro<span class="o">/</span>gds<span class="s2">&quot; </span>
+
+<span class="s2">saveNetlist ../data/${rm_core_top}.pg.flat.v -flat -phys -excludeLeafCell -excludeCellInst $lvs_exclude_cells</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Signoff</strong></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c"># save the design for signoff</span>
+<span class="nv">saveDesign</span><span class="w"> </span><span class="nv">${rm_core_top}</span>.signoff.enc
+
+<span class="k">set</span><span class="w"> </span>stop_time<span class="w"> </span><span class="k">[</span><span class="nb">clock</span><span class="w"> </span>seconds<span class="k">]</span>
+<span class="k">set</span><span class="w"> </span>elapsedTime<span class="w"> </span><span class="k">[</span><span class="nb">clock</span><span class="w"> </span>format<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="nv">$stop_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">$start_time</span><span class="k">]</span><span class="w"> </span><span class="o">-</span>format<span class="w"> </span><span class="o">%</span>H:<span class="o">%</span>M:<span class="o">%</span>S<span class="w"> </span><span class="o">-</span>gmt<span class="w"> </span>true<span class="k">]</span>
+<span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;==============================================&quot;</span>
+<span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;        Elapsed runtime : $elapsedTime&quot;</span>
+<span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;==============================================&quot;</span>
+
+<span class="nv">date</span>
+</code></pre></div>
+
+<h2 id="_4">一些常见报错说明</h2>
+<h3 id="impsp-9099">IMPSP-9099</h3>
+<ul>
+<li>ERROR: (IMPSP-9099): Scan chains exist in this design but are not defined for xx% flops</li>
+<li>在<code>placeDesign</code>步骤中遇到了这个报错。</li>
+<li>扫描链（Scan Chain）是一种常用的数字集成电路（IC）测试技术，属于设计可测试性（Design for Testability, DFT）的范畴。扫描链技术是为了简化数字逻辑电路的测试而引入的，它可以让测试人员更容易地访问和控制芯片内部的触发器（Flip-Flops）</li>
+<li>可能的解决方法：<ul>
+<li>在<code>placeDesign</code>前添加参数选项：<code>setPlaceMode -place_global_ignore_scan false</code></li>
+<li>参考<a href="https://community.cadence.com/cadence_technology_forums/f/digital-implementation/57299/error-impsp-9099-scan-chains-exist-in-this-design-but-are-not-defined-for-xx-flops">这篇论坛提问</a></li>
+</ul>
+</li>
+<li><strong>不理会这个报错也不影响后续流程</strong></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>

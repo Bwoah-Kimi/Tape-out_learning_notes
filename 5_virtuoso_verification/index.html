@@ -1,0 +1,568 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Bwoah-Kimi">
+      
+      
+        <link rel="canonical" href="https://bwoah-kimi.github.io/Tape-out_learning_notes/5_virtuoso_verification/">
+      
+      
+        <link rel="prev" href="../4_innovus_backend_workflow/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+    
+    
+      
+        <title>Virtuoso Implementation - Tape-out Learning Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.d7758b05.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrainsMono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrainsMono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#virtuoso-verfication-workflow" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="Tape-out Learning Notes" class="md-header__button md-logo" aria-label="Tape-out Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tape-out Learning Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Virtuoso Implementation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Tape-out Learning Notes" class="md-nav__button md-logo" aria-label="Tape-out Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tape-out Learning Notes
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_code_modification_and_simulation_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Simulation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_FPGA_verification_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FPGA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_genus_synthesis_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Genus Synthesis
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_innovus_backend_workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Innovus Implementation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Virtuoso Implementation
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Virtuoso Implementation
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#virtuoso" class="md-nav__link">
+    <span class="md-ellipsis">
+      将设计导入Virtuoso
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查LVS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drc" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查DRC
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#virtuoso" class="md-nav__link">
+    <span class="md-ellipsis">
+      将设计导入Virtuoso
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查LVS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drc" class="md-nav__link">
+    <span class="md-ellipsis">
+      检查DRC
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="virtuoso-verfication-workflow">Virtuoso Verfication Workflow</h1>
+<p>在Innovus完成所有的Place &amp; Route并修复基本上所有的DRC之后，使用Virtuoso：
+* 修复剩余或新增的DRC
+* 检查LVS</p>
+<h2 id="virtuoso">将设计导入Virtuoso</h2>
+<ul>
+<li>在Innovus流程中，通过如下的命令导出GDS文件和门级网表。<ul>
+<li>如果设计中使用了SRAM/Register File或子模块，需要在<code>-merge</code>选项中把Macro的<code>gds</code>或<code>gds2</code>文件路径添加进来。 </li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nv">streamOut</span><span class="w"> </span><span class="o">-</span>mapFile<span class="w"> </span><span class="nv">${rm_lef_layer_map}</span><span class="w"> </span>..<span class="o">/</span>data<span class="o">/</span><span class="nv">${rm_core_top}</span>.gds2<span class="w"> </span><span class="o">-</span>mode<span class="w"> </span>ALL<span class="w"> </span><span class="err">\</span>
+<span class="w">        </span><span class="nv">-merge</span><span class="w"> </span><span class="s2">&quot;/work/home/wumeng/pdks/tsmc/tsmc22ull/tcbn22ullbwp7t30p140lvt_110a/digital/Back_End/gds/tcbn22ullbwp7t30p140lvt_110a/tcbn22ullbwp7t30p140lvt.gds \</span>
+<span class="s2">        /path/to/my/sram/gds \</span>
+<span class="s2">        /path/to/my/register_file/gds \</span>
+<span class="s2">        /path/to/my/macro/gds&quot;</span><span class="w"> </span>
+
+saveNetlist<span class="w"> </span>..<span class="o">/</span>data<span class="o">/</span><span class="nv">${rm_core_top}</span>.pg.flat.v<span class="w"> </span><span class="o">-</span>flat<span class="w"> </span><span class="o">-</span>phys<span class="w"> </span><span class="o">-</span>excludeLeafCell<span class="w"> </span><span class="o">-</span>excludeCellInst<span class="w"> </span><span class="nv">$lvs_exclude_cells</span>
+</code></pre></div>
+
+<ul>
+<li>新建一个存放Virtuoso工程文件的文件夹，在其中<code>b virtuoso</code>打开Virtuoso</li>
+<li>打开Library Manager，确保设计所需要的工艺库(例如<code>tsmcN22</code>)在Virtuoso搜索路径中</li>
+<li>使用Library Manager新建一个Library用于存放完成后端流程的设计</li>
+<li>选择<code>Attach to an existing technology library</code>，并选择相应的工艺库(例如<code>tsmcN22</code>)。</li>
+<li>在Virtuoso窗口上方选择<code>File</code>-&gt;<code>Import</code>-&gt;<code>Stream</code></li>
+<li>在Innovus的输出文件夹中添加<code>&lt;MY_MODULE&gt;.gds2</code>文件，添加到此前新建的Library中，并选择所从属的工艺库，按下方<code>Translate</code>按钮导入设计</li>
+<li>
+<p>在Virtuoso窗口上方选择<code>File</code>-&gt;<code>Open</code>打开顶层模块的Layout</p>
+</li>
+<li>
+<p><strong>最小格点设置</strong>：为了在Virtuoso中正常选中器件，进行各种操作，需要在Layout Suite L上方选择<code>Options</code>-&gt;<code>Display</code>，把<code>X Snap Spacing</code>和<code>Y Snap Spacing</code>改成0.005</p>
+</li>
+</ul>
+<h2 id="lvs">检查LVS</h2>
+<ul>
+<li>LVS全称是Layout Versus Schematic，翻译为版图与原理图一致性检查。</li>
+<li>LVS检查的是目前的版图与门级网表所代表的逻辑是否一致。如果是一致的，那么说明物理版图与电路原理图一致，也就是Innovus的后端流程无误。</li>
+<li>将门级网表<code>.v</code>转换成<code>.cdl</code>格式<ul>
+<li>需要在<code>./cadence/v2lvs.run</code>文件中添加相应工艺库的SPICE文件，随后运行如下指令</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>./cadence
+b<span class="w"> </span>./v2lvs.run
+</code></pre></div>
+
+<ul>
+<li>导入LVS Runset文件<ul>
+<li>在Virtuoso窗口上方选择<code>Calibre</code>-&gt;<code>nmLVS</code></li>
+<li>在<code>Runset File Path</code>中添加Calibre文件</li>
+</ul>
+</li>
+<li>在左侧<code>Inputs</code>-&gt;<code>Netlist</code>中选择导入<code>.cdl</code>格式的SPICE文件</li>
+<li>在左侧<code>LVS Options</code>-&gt;<code>Supply</code>中定义Power nets与Ground nets</li>
+<li>如有需要，在左侧各个选择中设置相应的选项</li>
+<li>在上方<code>File</code>-&gt;<code>Save Runset As</code>保存LVS的配置，以便后续使用</li>
+</ul>
+<h2 id="drc">检查DRC</h2>
+<ul>
+<li>DRC全称为Design Rule Check，检查的是目前的版图中各个器件、布局布线的摆放、间距、密度等指标是否满足晶圆厂的规范。</li>
+<li>理想情况下，我们不需要在Virtuoso中修改DRC报错，我们希望能够使用Innovus提供的工具自动修DRC 相关内容详见<a href="../4_innovus_backend_workflow/">innovus_backend_workflow.md</a>中的相关内容。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>
